@@ -14,15 +14,11 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 # --- DATABASE CONNECTION ---
-# This connects to your Google Sheet using Streamlit's secure secrets management
 conn = st.connection("gsheets", type=GSheetsConnection)
 
-# Read the current data from the Google Sheet
-# We use ttl=0 to ensure it fetches the newest data every time
 try:
     df = conn.read(worksheet="Members", ttl=0)
 except:
-    # If the sheet is empty or failing, create an empty structure
     df = pd.DataFrame(columns=['id', 'name', 'phone', 'expiry_date'])
 
 # --- SIDEBAR NAVIGATION ---
@@ -58,8 +54,14 @@ elif page == "Member Login":
     member_id = st.text_input("Enter your Member ID to verify")
     
     if st.button("View My Info"):
-        # Search the dataframe for the member ID
-        user_data = df[df['id'] == member_id]
+        # 1. Clean up the database IDs (force them to be text and remove spaces)
+        df['id'] = df['id'].astype(str).str.strip()
+        
+        # 2. Clean up the ID the customer just typed
+        clean_search_id = str(member_id).strip()
+        
+        # 3. Search for the exact match
+        user_data = df[df['id'] == clean_search_id]
         
         if not user_data.empty:
             name = user_data.iloc[0]['name']
@@ -85,7 +87,7 @@ elif page == "Admin Panel":
     st.title("Admin Dashboard")
     password = st.text_input("Enter Admin Password", type="password")
     
-    if password == "admin123": # Change this to a secure password later
+    if password == "admin123": 
         st.success("Access Granted")
         
         with st.expander("Add New Member"):
@@ -95,45 +97,42 @@ elif page == "Admin Panel":
             new_expiry = st.date_input("Membership Expiry Date")
             
             if st.button("Register Member"):
-                if new_id in df['id'].values:
+                # Clean up existing IDs to check for duplicates safely
+                existing_ids = df['id'].astype(str).str.strip().tolist()
+                clean_new_id = str(new_id).strip()
+                
+                if clean_new_id in existing_ids:
                     st.error("This ID already exists.")
                 else:
-                    # Create a new row and add it to the dataframe
                     new_row = pd.DataFrame([{
-                        'id': new_id, 
+                        'id': clean_new_id, 
                         'name': new_name, 
                         'phone': new_phone, 
                         'expiry_date': new_expiry.strftime('%Y-%m-%d')
                     }])
                     updated_df = pd.concat([df, new_row], ignore_index=True)
                     
-                    # Update the Google Sheet with the new data
                     conn.update(worksheet="Members", data=updated_df)
                     st.success("Member added successfully! Data saved to cloud.")
-                    st.rerun() # Refresh the page to show new data
+                    st.rerun()
 
         st.divider()
         st.subheader("Current Members & Notifications")
         
         if not df.empty:
-            # Notifications Logic
             try:
-                # Convert string dates to actual datetime objects for math
                 df['date_obj'] = pd.to_datetime(df['expiry_date']).dt.date
                 today = date.today()
                 
-                # Highlight members expiring within 7 days
                 expiring_soon = df[(df['date_obj'] <= today + pd.Timedelta(days=7))]
                 
                 if not expiring_soon.empty:
                     st.warning(f"⚠️ {len(expiring_soon)} Memberships expiring soon or expired!")
-                    # Drop the temporary date object column before displaying
                     st.table(expiring_soon.drop(columns=['date_obj']))
             except:
                 st.write("Ensure all dates are in YYYY-MM-DD format for notifications to work.")
             
             st.write("### Complete Member List")
-            # Display full dataframe without the temporary date object column
             display_df = df.drop(columns=['date_obj']) if 'date_obj' in df.columns else df
             st.dataframe(display_df)
             
