@@ -4,23 +4,24 @@ from datetime import datetime, date
 from streamlit_gsheets import GSheetsConnection
 
 # --- APP STYLING & CONFIG ---
-st.set_page_config(page_title="R1 Fitness", page_icon="🟨", layout="wide")
+st.set_page_config(page_title="R1 Fitness", page_icon="⚡", layout="wide")
 
 st.markdown("""
     <style>
     /* Main background and text colors */
-    .stApp { background-color: #0a0a0a; color: #ffffff; }
+    .stApp { background-color: #050505; color: #ffffff; }
     
-    /* Bold Yellow Accents */
-    h1, h2, h3 { color: #FFCC00; font-family: 'Arial Black', sans-serif; text-transform: uppercase; }
+    /* Bold Yellow Accents & Lightning Vibe */
+    h1, h2, h3 { color: #FFCC00; font-family: 'Arial Black', sans-serif; text-transform: uppercase; text-shadow: 0px 0px 10px rgba(255, 204, 0, 0.3); }
+    strong { color: #FFCC00; font-weight: 900; }
     
-    /* Custom Cards for Pricing */
+    /* Custom Cards for Pricing & Features */
     .custom-card {
-        background-color: #1a1a1a;
+        background-color: #111111;
         padding: 25px;
         border-radius: 10px;
         border-top: 5px solid #FFCC00;
-        box-shadow: 0 4px 8px rgba(255, 204, 0, 0.15);
+        box-shadow: 0 4px 15px rgba(255, 204, 0, 0.15);
         margin-bottom: 20px;
         text-align: center;
     }
@@ -34,23 +35,38 @@ st.markdown("""
         border-radius: 8px;
         text-align: center;
         margin: 30px 0;
+        box-shadow: 0 0 20px rgba(255, 204, 0, 0.4);
     }
-    .quote-banner h3 { color: #000000; margin: 0; font-style: italic; letter-spacing: 1px; }
+    .quote-banner h3 { color: #000000; margin: 0; font-style: italic; letter-spacing: 1px; text-shadow: none; }
     
-    /* Button Styling */
+    /* Button Styling - High Energy */
     .stButton>button { 
         background-color: #FFCC00; 
         color: #000000; 
-        font-weight: bold; 
+        font-weight: 900; 
+        font-size: 18px;
+        letter-spacing: 1px;
         border-radius: 8px; 
         border: none; 
         width: 100%;
         transition: 0.3s;
+        text-transform: uppercase;
+        box-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
     }
     .stButton>button:hover { 
-        background-color: #CCA300; 
+        background-color: #ffffff; 
         color: #000000;
-        border: 1px solid #ffffff; 
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.8); 
+    }
+    
+    /* Info Box Styling for Member Portal */
+    .info-box {
+        background-color: #111;
+        border: 1px solid #333;
+        border-left: 5px solid #FFCC00;
+        padding: 20px;
+        border-radius: 5px;
+        margin-bottom: 15px;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -64,27 +80,24 @@ except:
     df = pd.DataFrame(columns=['id', 'name', 'phone', 'expiry_date'])
 
 # --- SIDEBAR NAVIGATION ---
-st.sidebar.title("🟨 R1 FITNESS")
+st.sidebar.title("⚡ R1 FITNESS")
 page = st.sidebar.radio("Menu", ["Home & Plans", "Member Login", "Admin Panel"])
 
 # --- 1. HOME & PLANS ---
 if page == "Home & Plans":
     
-    # Text-Based Logo
     st.markdown("<h1 style='font-size: 4.5rem; text-align: center; margin-bottom: 0;'>R1 FITNESS</h1>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center; color: #fff; font-size: 1.5rem; font-style: italic; letter-spacing: 3px;'>FOR GOOD LIFE</p>", unsafe_allow_html=True)
     
-    # Hero Image (High-res gym photo pulled from web)
+    # Hero Image
     st.image("https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop", use_container_width=True)
     
-    # Motivational Quote Banner
     st.markdown("""
         <div class="quote-banner">
             <h3>"BLOOD, SWEAT, AND RESPECT. FIRST TWO YOU GIVE, LAST ONE YOU EARN."</h3>
         </div>
     """, unsafe_allow_html=True)
     
-    # --- PRICING PLANS SECTION ---
     st.write("<h2 style='text-align: center; margin-top: 20px;'>Membership Plans</h2>", unsafe_allow_html=True)
     p1, p2, p3 = st.columns(3)
     
@@ -111,19 +124,17 @@ if page == "Home & Plans":
         <div class="custom-card">
             <h3>1 YEAR</h3>
             <h2>₹5000</h2>
-            <p style='color: #aaa;'>Premium 24/7 access<br>Personal training prep<br><strong style='color:#FFCC00;'>Best Value!</strong></p>
+            <p style='color: #aaa;'>Access during gym timings<br>Personal training prep<br><strong style='color:#FFCC00;'>Best Value!</strong></p>
         </div>
         """, unsafe_allow_html=True)
 
     st.divider()
     
-    # --- DENSE LAYOUT: IMAGE + BMI CALCULATOR ---
     st.write("<h2 style='text-align: center;'>Check Your Stats</h2>", unsafe_allow_html=True)
     
     col_img, col_bmi = st.columns([1, 1]) 
     
     with col_img:
-        # 3D/Gritty Workout Graphic beside the calculator
         st.image("https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=1470&auto=format&fit=crop", use_container_width=True)
         st.markdown("<h4 style='text-align: center; color: #cccccc; margin-top: 10px;'>EXCUSES DON'T BURN CALORIES.</h4>", unsafe_allow_html=True)
 
@@ -142,33 +153,67 @@ if page == "Home & Plans":
             else: st.error("Category: Overweight - Let's get to work!")
         st.markdown("</div>", unsafe_allow_html=True)
 
-# --- 2. MEMBER LOGIN ---
+# --- 2. MEMBER LOGIN (NEW HIGH VOLTAGE UI) ---
 elif page == "Member Login":
-    st.title("Member Portal")
-    member_id = st.text_input("Enter your Member ID to verify")
+    # Dark, high-energy neon gym image
+    st.image("https://images.unsplash.com/photo-1558691015-33cbabc4c277?q=80&w=1470&auto=format&fit=crop", use_container_width=True)
     
-    if st.button("View My Info"):
-        df['id'] = df['id'].astype(str).str.replace(r'\.0$', '', regex=True).str.strip().str.upper()
-        clean_search_id = str(member_id).strip().upper()
-        user_data = df[df['id'] == clean_search_id]
+    st.markdown("<h1 style='text-align: center; font-size: 3.5rem; margin-top: 20px;'>⚡ HIGH VOLTAGE PORTAL ⚡</h1>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; color: #FFCC00; font-weight: 900; font-size: 1.2rem; letter-spacing: 2px;'>IGNITE YOUR PROFILE</p>", unsafe_allow_html=True)
+    
+    st.write("<br>", unsafe_allow_html=True)
+    
+    # Dense UI Layout: Login on the left, Gym Info on the right
+    col_login, col_info = st.columns([1.5, 1])
+    
+    with col_login:
+        st.write("### 🔑 SYSTEM ACCESS")
+        member_id = st.text_input("ENTER MEMBER ID", placeholder="e.g. R1-001")
         
-        if not user_data.empty:
-            name = user_data.iloc[0]['name']
-            expiry_str = str(user_data.iloc[0]['expiry_date'])
+        if st.button("⚡ VERIFY CLEARANCE"):
+            df['id'] = df['id'].astype(str).str.replace(r'\.0$', '', regex=True).str.strip().str.upper()
+            clean_search_id = str(member_id).strip().upper()
+            user_data = df[df['id'] == clean_search_id]
             
-            st.write(f"### Welcome back, {name}!")
-            st.info(f"Your Membership Expiry Date: {expiry_str}")
-            
-            try:
-                expiry = datetime.strptime(expiry_str, '%Y-%m-%d').date()
-                if expiry < date.today():
-                    st.error("Your membership has expired. Please visit the desk to renew.")
-                else:
-                    st.success("Your membership is Active.")
-            except:
-                st.warning("Could not verify exact date format.")
-        else:
-            st.error("Member ID not found.")
+            if not user_data.empty:
+                name = user_data.iloc[0]['name']
+                expiry_str = str(user_data.iloc[0]['expiry_date'])
+                
+                st.markdown(f"<div class='info-box'><h3>WELCOME BACK, {name}!</h3></div>", unsafe_allow_html=True)
+                st.info(f"**Membership Expiry Date:** {expiry_str}")
+                
+                try:
+                    expiry = datetime.strptime(expiry_str, '%Y-%m-%d').date()
+                    if expiry < date.today():
+                        st.error("⚠️ YOUR MEMBERSHIP HAS EXPIRED. PLEASE VISIT THE DESK TO RENEW.")
+                    else:
+                        st.success("✅ YOUR MEMBERSHIP IS ACTIVE. GET TO WORK.")
+                except:
+                    st.warning("Could not verify exact date format.")
+            else:
+                st.error("❌ MEMBER ID NOT FOUND IN DATABASE.")
+
+    with col_info:
+        st.write("### 🕒 GYM TIMINGS")
+        st.markdown("""
+        <div class="info-box" style="text-align: center;">
+            <h2 style="color: #ffffff; margin: 0;">09:00 - 12:00</h2>
+            <p style="color: #FFCC00; font-weight: bold; margin: 0;">EVERY DAY</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.write("### 🏋️ R1 ZONES")
+        st.markdown("""
+        <div class="info-box">
+            <p><strong>🔥 HEAVY WEIGHTS:</strong> Elite powerlifting racks, free weights up to 60kg, and custom machines.</p>
+        </div>
+        <div class="info-box">
+            <p><strong>⚡ CARDIO ARENA:</strong> High-voltage treadmills, assault bikes, and stair climbers.</p>
+        </div>
+        <div class="info-box">
+            <p><strong>🧘 YOGA STUDIO:</strong> Dedicated zen space for mobility, stretching, and focused breathing.</p>
+        </div>
+        """, unsafe_allow_html=True)
 
 # --- 3. ADMIN PANEL ---
 elif page == "Admin Panel":
