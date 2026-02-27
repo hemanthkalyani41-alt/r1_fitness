@@ -14,10 +14,7 @@ st.markdown("""
     /* Bold Yellow Accents */
     h1, h2, h3 { color: #FFCC00; font-family: 'Arial Black', sans-serif; text-transform: uppercase; }
     
-    /* Logo Tagline */
-    .tagline { color: #ffffff; font-style: italic; font-size: 1.2rem; margin-top: -15px; margin-bottom: 30px;}
-    
-    /* Custom Cards for Features and Pricing */
+    /* Custom Cards for Pricing */
     .custom-card {
         background-color: #1a1a1a;
         padding: 25px;
@@ -29,9 +26,18 @@ st.markdown("""
     }
     .custom-card h3 { color: #FFCC00; margin-bottom: 10px; font-size: 24px;}
     .custom-card h2 { color: #ffffff; margin-bottom: 10px; font-size: 32px;}
-    .custom-card p { color: #cccccc; font-size: 15px; }
     
-    /* Button Styling - Yellow background with Black text */
+    /* Quote Banner */
+    .quote-banner {
+        background-color: #FFCC00;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        margin: 30px 0;
+    }
+    .quote-banner h3 { color: #000000; margin: 0; font-style: italic; letter-spacing: 1px; }
+    
+    /* Button Styling */
     .stButton>button { 
         background-color: #FFCC00; 
         color: #000000; 
@@ -64,14 +70,22 @@ page = st.sidebar.radio("Menu", ["Home & Plans", "Member Login", "Admin Panel"])
 # --- 1. HOME & PLANS ---
 if page == "Home & Plans":
     
-    # Text-Based Logo and Tagline
-    st.markdown("<h1 style='font-size: 4rem; text-align: center;'>R1 FITNESS</h1>", unsafe_allow_html=True)
-    st.markdown("<p class='tagline' style='text-align: center;'>FOR GOOD LIFE</p>", unsafe_allow_html=True)
+    # Text-Based Logo
+    st.markdown("<h1 style='font-size: 4.5rem; text-align: center; margin-bottom: 0;'>R1 FITNESS</h1>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; color: #fff; font-size: 1.5rem; font-style: italic; letter-spacing: 3px;'>FOR GOOD LIFE</p>", unsafe_allow_html=True)
     
-    st.divider()
+    # Hero Image (High-res gym photo pulled from web)
+    st.image("https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop", use_container_width=True)
+    
+    # Motivational Quote Banner
+    st.markdown("""
+        <div class="quote-banner">
+            <h3>"BLOOD, SWEAT, AND RESPECT. FIRST TWO YOU GIVE, LAST ONE YOU EARN."</h3>
+        </div>
+    """, unsafe_allow_html=True)
     
     # --- PRICING PLANS SECTION ---
-    st.write("<h2 style='text-align: center;'>Membership Plans</h2>", unsafe_allow_html=True)
+    st.write("<h2 style='text-align: center; margin-top: 20px;'>Membership Plans</h2>", unsafe_allow_html=True)
     p1, p2, p3 = st.columns(3)
     
     with p1:
@@ -79,16 +93,16 @@ if page == "Home & Plans":
         <div class="custom-card">
             <h3>1 MONTH</h3>
             <h2>₹1000</h2>
-            <p>Full gym access<br>Standard equipment<br>Locker room</p>
+            <p style='color: #aaa;'>Full gym access<br>Standard equipment<br>Locker room</p>
         </div>
         """, unsafe_allow_html=True)
         
     with p2:
         st.markdown("""
-        <div class="custom-card" style="border-top: 5px solid #ffffff;">
+        <div class="custom-card" style="border-top: 5px solid #ffffff; transform: scale(1.05);">
             <h3 style="color: #ffffff;">3 MONTHS</h3>
             <h2>₹2000</h2>
-            <p>Full gym access<br>Diet consultation<br>Save ₹1000!</p>
+            <p style='color: #aaa;'>Full gym access<br>Diet consultation<br><strong style='color:#FFCC00;'>Save ₹1000!</strong></p>
         </div>
         """, unsafe_allow_html=True)
         
@@ -97,19 +111,25 @@ if page == "Home & Plans":
         <div class="custom-card">
             <h3>1 YEAR</h3>
             <h2>₹5000</h2>
-            <p>Premium 24/7 access<br>Personal training prep<br>Best Value!</p>
+            <p style='color: #aaa;'>Premium 24/7 access<br>Personal training prep<br><strong style='color:#FFCC00;'>Best Value!</strong></p>
         </div>
         """, unsafe_allow_html=True)
 
     st.divider()
     
-    # --- BMI CALCULATOR ---
+    # --- DENSE LAYOUT: IMAGE + BMI CALCULATOR ---
     st.write("<h2 style='text-align: center;'>Check Your Stats</h2>", unsafe_allow_html=True)
-    b1, b2, b3 = st.columns([1, 2, 1]) 
     
-    with b2:
-        st.markdown("<div style='background-color:#1a1a1a; padding:20px; border-radius:10px; border: 1px solid #333;'>", unsafe_allow_html=True)
-        st.write("<h4 style='color: #FFCC00; text-align: center;'>BMI Calculator</h4>", unsafe_allow_html=True)
+    col_img, col_bmi = st.columns([1, 1]) 
+    
+    with col_img:
+        # 3D/Gritty Workout Graphic beside the calculator
+        st.image("https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=1470&auto=format&fit=crop", use_container_width=True)
+        st.markdown("<h4 style='text-align: center; color: #cccccc; margin-top: 10px;'>EXCUSES DON'T BURN CALORIES.</h4>", unsafe_allow_html=True)
+
+    with col_bmi:
+        st.markdown("<div style='background-color:#1a1a1a; padding:30px; border-radius:10px; border: 1px solid #333; height: 100%;'>", unsafe_allow_html=True)
+        st.write("<h4 style='color: #FFCC00; text-align: center; margin-bottom: 20px;'>BMI Calculator</h4>", unsafe_allow_html=True)
         weight = st.number_input("Weight (kg)", min_value=1.0, step=0.1)
         height = st.number_input("Height (cm)", min_value=1.0, step=0.1)
         
@@ -117,9 +137,9 @@ if page == "Home & Plans":
             height_m = height / 100
             bmi = weight / (height_m ** 2)
             st.success(f"**Your BMI is: {round(bmi, 2)}**")
-            if bmi < 18.5: st.warning("Category: Underweight")
-            elif 18.5 <= bmi < 25: st.info("Category: Normal Weight")
-            else: st.error("Category: Overweight")
+            if bmi < 18.5: st.warning("Category: Underweight - Time to bulk up!")
+            elif 18.5 <= bmi < 25: st.info("Category: Normal Weight - Keep crushing it!")
+            else: st.error("Category: Overweight - Let's get to work!")
         st.markdown("</div>", unsafe_allow_html=True)
 
 # --- 2. MEMBER LOGIN ---
