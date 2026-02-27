@@ -54,11 +54,11 @@ elif page == "Member Login":
     member_id = st.text_input("Enter your Member ID to verify")
     
     if st.button("View My Info"):
-        # 1. Clean up the database IDs (force them to be text and remove spaces)
-        df['id'] = df['id'].astype(str).str.strip()
+        # 1. Bulletproof the database IDs: make string, remove hidden '.0', remove spaces, make uppercase
+        df['id'] = df['id'].astype(str).str.replace(r'\.0$', '', regex=True).str.strip().str.upper()
         
-        # 2. Clean up the ID the customer just typed
-        clean_search_id = str(member_id).strip()
+        # 2. Bulletproof the customer's typed ID
+        clean_search_id = str(member_id).strip().upper()
         
         # 3. Search for the exact match
         user_data = df[df['id'] == clean_search_id]
@@ -138,3 +138,4 @@ elif page == "Admin Panel":
             
     elif password != "":
         st.error("Incorrect Password")
+
