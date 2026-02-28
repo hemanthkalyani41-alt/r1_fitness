@@ -8,11 +8,20 @@ st.set_page_config(page_title="R1 Fitness | Premium Club", layout="wide")
 
 st.markdown("""
     <style>
-    /* Premium Luxury Theme - Matte Black, Crisp White, Elegant Gold */
+    /* Premium Luxury Theme with Subtle Neon Red Stripes */
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
     
     .stApp { 
         background-color: #080808; 
+        /* The Neon Red Laser Stripe */
+        background-image: repeating-linear-gradient(
+            -45deg,
+            #080808,
+            #080808 40px,
+            rgba(255, 0, 51, 0.02) 40px,
+            rgba(255, 0, 51, 0.12) 42px, /* Neon Red Core */
+            rgba(255, 0, 51, 0.02) 44px
+        );
         color: #e0e0e0; 
         font-family: 'Montserrat', sans-serif;
     }
@@ -325,7 +334,7 @@ elif page == "Member Portal":
         st.markdown("</div>", unsafe_allow_html=True)
 
 # ==========================================
-# 5. ADMIN COMMAND CENTER 
+# 5. ADMIN COMMAND CENTER
 # ==========================================
 elif page == "Admin Command":
     st.markdown("<h1 style='text-align: center; font-size: 2.5rem; margin-top: 20px;'>OPERATIONS <span style='color: #ffffff;'>DASHBOARD</span></h1><br>", unsafe_allow_html=True)
@@ -428,4 +437,3 @@ st.markdown("""
         &copy; 2026 R1 Fitness. All Rights Reserved.
     </div>
 """, unsafe_allow_html=True)
-
