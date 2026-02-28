@@ -23,6 +23,10 @@ st.markdown("""
         color: #ffffff; 
     }
     
+    /* DISABLE IMAGE MAXIMIZE GLOBALLY */
+    button[title="View fullscreen"] { display: none !important; }
+    [data-testid="stImage"] img { pointer-events: none; }
+    
     /* Bold Accents */
     h1, h2, h3, h4 { color: #FFCC00; font-family: 'Arial Black', sans-serif; text-transform: uppercase; text-shadow: 0px 0px 10px rgba(255, 204, 0, 0.2); }
     .blue-glow { color: #00E5FF; text-shadow: 0px 0px 15px rgba(0, 229, 255, 0.6); }
@@ -133,14 +137,18 @@ try:
 except:
     df = pd.DataFrame(columns=['id', 'name', 'phone', 'expiry_date'])
 
-# --- SIDEBAR NAVIGATION WITH BOTTOM BARBELL LOGO ---
+# --- SIDEBAR NAVIGATION WITH BOTTOM TEXT LOGO ---
 st.sidebar.markdown("<h2 style='text-align: center;' class='blue-glow'>R1 FITNESS</h2>", unsafe_allow_html=True)
 page = st.sidebar.radio("SYSTEM MENU", ["Home Base", "Membership Plans", "Pro Shop", "Member Portal", "Admin Command"])
 
 # Pushes the logo to the bottom of the sidebar
-st.sidebar.markdown("<br><br><br><br><br><br>", unsafe_allow_html=True)
-st.sidebar.image("https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=500&auto=format&fit=crop", use_container_width=True)
-st.sidebar.markdown("<p style='text-align: center; color: #FFCC00; font-weight: 900; letter-spacing: 2px; margin-top: -10px;'>IRON & HONOR</p>", unsafe_allow_html=True)
+st.sidebar.markdown("<br><br><br><br><br><br><br>", unsafe_allow_html=True)
+st.sidebar.markdown("""
+    <div style='text-align: center;'>
+        <h1 style='color: #FFCC00; font-family: "Arial Black", sans-serif; font-size: 4rem; margin-bottom: -25px; text-shadow: 0 0 15px rgba(255, 204, 0, 0.4);'>R1</h1>
+        <h2 style='color: #00E5FF; font-family: "Arial Black", sans-serif; font-size: 1.8rem; letter-spacing: 3px; text-shadow: 0 0 15px rgba(0, 229, 255, 0.4);'>FITNESS</h2>
+    </div>
+""", unsafe_allow_html=True)
 
 # ==========================================
 # 1. HOME BASE 
@@ -218,7 +226,7 @@ elif page == "Membership Plans":
         if st.button("BECOME A LEGEND", key="btn5"): st.success("Visit the front desk for Ultimate Onboarding!")
 
 # ==========================================
-# 3. PRO SHOP (3D CARBON FIBRE & SQUARE IMAGES)
+# 3. PRO SHOP 
 # ==========================================
 elif page == "Pro Shop":
     st.markdown("<h1 style='text-align: center;'>R1 <span style='color: #00E5FF;'>PRO SHOP</span></h1>", unsafe_allow_html=True)
@@ -267,11 +275,17 @@ elif page == "Pro Shop":
         if st.button("BUY NOW", key="shop4"): st.info("Item added to desk pickup.")
 
 # ==========================================
-# 4. MEMBER PORTAL 
+# 4. MEMBER PORTAL (SMALLER & LOCKED IMAGE)
 # ==========================================
 elif page == "Member Portal":
-    st.image("https://images.unsplash.com/photo-1574680096145-d05b474e2155?q=80&w=1470&auto=format&fit=crop", use_container_width=True)
-    st.markdown("<h1 style='text-align: center; font-size: 3.5rem; margin-top: 20px;'>MEMBER <span style='color: #00E5FF;'>PORTAL</span></h1>", unsafe_allow_html=True)
+    # Using custom HTML for a smaller, unclickable banner image
+    st.markdown("""
+    <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+        <img src="https://images.unsplash.com/photo-1574680096145-d05b474e2155?q=80&w=1470&auto=format&fit=crop" style="width: 70%; height: 250px; object-fit: cover; border-radius: 12px; pointer-events: none; border: 2px solid #333; box-shadow: 0 10px 20px rgba(0,0,0,0.8);">
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("<h1 style='text-align: center; font-size: 3.5rem; margin-top: 10px;'>MEMBER <span style='color: #00E5FF;'>PORTAL</span></h1>", unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
@@ -303,13 +317,18 @@ elif page == "Member Portal":
         st.write("---")
 
 # ==========================================
-# 5. ADMIN COMMAND CENTER (AUTO-DELETE ACTIVE)
+# 5. ADMIN COMMAND CENTER (SMALLER & LOCKED IMAGE)
 # ==========================================
 elif page == "Admin Command":
-    st.image("https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1470&auto=format&fit=crop", use_container_width=True)
-    st.markdown("<h1 style='text-align: center; font-size: 3.5rem; margin-top: 20px;'>COMMAND <span style='color: #00E5FF;'>CENTER</span></h1>", unsafe_allow_html=True)
+    # Using custom HTML for a smaller, unclickable banner image
+    st.markdown("""
+    <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1470&auto=format&fit=crop" style="width: 70%; height: 250px; object-fit: cover; border-radius: 12px; pointer-events: none; border: 2px solid #333; box-shadow: 0 10px 20px rgba(0,0,0,0.8);">
+    </div>
+    """, unsafe_allow_html=True)
     
-    # Removed HTML div to kill the blank space, using collapsed label for tightness
+    st.markdown("<h1 style='text-align: center; font-size: 3.5rem; margin-top: 10px;'>COMMAND <span style='color: #00E5FF;'>CENTER</span></h1>", unsafe_allow_html=True)
+    
     st.markdown("<h3 style='text-align: center; color: #00E5FF;'>🔐 SYSTEM LOCK</h3>", unsafe_allow_html=True)
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
@@ -323,15 +342,11 @@ elif page == "Admin Command":
             try:
                 df['date_obj'] = pd.to_datetime(df['expiry_date'], errors='coerce').dt.date
                 today = date.today()
-                
-                # Filter out anyone whose date is less than today
                 expired_mask = df['date_obj'] < today
                 
                 if expired_mask.any():
                     num_deleted = expired_mask.sum()
-                    # Keep only active members
                     df = df[~expired_mask]
-                    # Update Google Sheets immediately
                     conn.update(worksheet="Members", data=df.drop(columns=['date_obj']))
                     st.toast(f"🧹 SYSTEM PURGE: Automatically removed {num_deleted} expired member(s) from database.")
             except:
