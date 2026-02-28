@@ -4,149 +4,142 @@ from datetime import datetime, date
 from streamlit_gsheets import GSheetsConnection
 
 # --- APP STYLING & CONFIG ---
-st.set_page_config(page_title="R1 Fitness | Premium Club", layout="wide")
+st.set_page_config(page_title="R1 Fitness", layout="wide")
 
 st.markdown("""
     <style>
-    /* Premium Luxury Theme with Subtle Neon Red Stripes */
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
-    
+    /* Realistic Industrial Striped Background */
     .stApp { 
-        background-color: #080808; 
+        background-color: #050505;
         background-image: repeating-linear-gradient(
             -45deg,
-            #080808,
-            #080808 40px,
-            rgba(255, 0, 51, 0.02) 40px,
-            rgba(255, 0, 51, 0.12) 42px,
-            rgba(255, 0, 51, 0.02) 44px
+            #050505,
+            #050505 20px,
+            rgba(255, 204, 0, 0.05) 20px,
+            rgba(255, 204, 0, 0.05) 22px,
+            rgba(0, 229, 255, 0.05) 22px,
+            rgba(0, 229, 255, 0.05) 24px
         );
-        color: #e0e0e0; 
-        font-family: 'Montserrat', sans-serif;
+        color: #ffffff; 
     }
     
-    /* Clean, Elegant Typography */
-    h1, h2, h3, h4 { color: #D4AF37; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
-    strong { color: #D4AF37; font-weight: 700; }
+    /* DISABLE IMAGE MAXIMIZE GLOBALLY */
+    button[title="View fullscreen"] { display: none !important; }
+    [data-testid="stImage"] img { pointer-events: none; }
     
-    /* Perfect Carbon Fibre Pattern for Sidebar */
+    /* Bold Accents */
+    h1, h2, h3, h4 { color: #FFCC00; font-family: 'Arial Black', sans-serif; text-transform: uppercase; text-shadow: 0px 0px 10px rgba(255, 204, 0, 0.2); }
+    .blue-glow { color: #00E5FF; text-shadow: 0px 0px 15px rgba(0, 229, 255, 0.6); }
+    .red-glow { color: #E60000; text-shadow: 0px 0px 15px rgba(230, 0, 0, 0.6); }
+    strong { color: #00E5FF; font-weight: 900; }
+    
+    /* Realistic 3D Carbon Fibre Pattern for Sidebar & Cards */
     [data-testid="stSidebar"] { 
         background:
             radial-gradient(black 15%, transparent 16%) 0 0,
             radial-gradient(black 15%, transparent 16%) 8px 8px,
             radial-gradient(rgba(255,255,255,.05) 15%, transparent 20%) 0 1px,
             radial-gradient(rgba(255,255,255,.05) 15%, transparent 20%) 8px 9px;
-        background-color: #050505;
+        background-color: #0a0a0a;
         background-size: 16px 16px;
-        border-right: 2px solid #D4AF37; 
-        box-shadow: 5px 0 25px rgba(212, 175, 55, 0.15); 
+        border-right: 2px solid #00E5FF; 
+        box-shadow: 5px 0 25px rgba(0, 229, 255, 0.15); 
     }
+    .stRadio div[role="radiogroup"] label { transition: all 0.3s ease-in-out; padding: 10px; border-radius: 8px; background-color: rgba(0,0,0,0.5); margin-bottom: 5px; border: 1px solid #222; }
+    .stRadio div[role="radiogroup"] label:hover { transform: scale(1.05) translateX(10px); background-color: #000; color: #00E5FF; border-left: 3px solid #00E5FF; box-shadow: 0 0 10px rgba(0, 229, 255, 0.3); }
     
-    /* Energetic Sidebar Menu Hover */
-    .stRadio div[role="radiogroup"] label { 
-        transition: all 0.3s ease-in-out; 
-        padding: 12px; 
-        border-radius: 6px; 
-        background-color: rgba(0,0,0,0.6); 
-        margin-bottom: 5px; 
-        border: 1px solid #1a1a1a; 
-    }
-    .stRadio div[role="radiogroup"] label:hover { 
-        transform: scale(1.05) translateX(10px); 
-        background-color: #000; 
-        color: #D4AF37; 
-        border-left: 4px solid #D4AF37; 
-        box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); 
-    }
-    
-    /* Elegant Custom Cards */
+    /* Standard Custom Cards */
     .custom-card {
-        background-color: #0f0f0f;
-        padding: 40px 20px;
-        border-radius: 8px;
-        border: 1px solid #1a1a1a;
-        text-align: center;
-        transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        background-color: #111111;
+        padding: 25px;
+        border-radius: 10px;
+        border-top: 5px solid #00E5FF;
+        box-shadow: 0 4px 15px rgba(0, 229, 255, 0.15);
         margin-bottom: 20px;
+        text-align: center;
+        transition: transform 0.3s ease;
     }
-    .custom-card:hover { 
-        transform: translateY(-8px); 
-        border-color: #D4AF37; 
-        box-shadow: 0 10px 25px rgba(212, 175, 55, 0.15);
-    }
-    .custom-card h3 { color: #ffffff; margin-bottom: 10px; font-size: 20px; font-weight: 400;}
-    .custom-card h2 { color: #D4AF37; margin-bottom: 15px; font-size: 36px; font-weight: 900;}
+    .custom-card:hover { transform: translateY(-10px); box-shadow: 0 8px 25px rgba(0, 229, 255, 0.4); }
+    .custom-card h3 { color: #00E5FF; margin-bottom: 10px; font-size: 24px;}
+    .custom-card h2 { color: #ffffff; margin-bottom: 10px; font-size: 32px;}
     
-    /* Minimalist Pro Shop Cards */
-    .product-card {
-        background-color: #0f0f0f;
+    /* Quote Banner - Changed to Deep Red */
+    .quote-banner {
+        background-color: #990000;
         padding: 20px;
         border-radius: 8px;
-        border: 1px solid #1a1a1a;
         text-align: center;
-        transition: all 0.3s ease;
+        margin: 30px 0;
+        box-shadow: 0 0 20px rgba(153, 0, 0, 0.5);
+        border: 1px solid #ff3333;
+    }
+    .quote-banner h3 { color: #ffffff; margin: 0; font-style: italic; letter-spacing: 1px; text-shadow: none; }
+    
+    /* 3D Carbon Fibre Product Cards */
+    .product-card {
+        background:
+            radial-gradient(black 15%, transparent 16%) 0 0,
+            radial-gradient(black 15%, transparent 16%) 8px 8px,
+            radial-gradient(rgba(255,255,255,.05) 15%, transparent 20%) 0 1px,
+            radial-gradient(rgba(255,255,255,.05) 15%, transparent 20%) 8px 9px;
+        background-color: #151515;
+        background-size: 16px 16px;
+        padding: 20px;
+        border-radius: 12px;
+        border: 2px solid #222;
+        border-bottom: 4px solid #00E5FF;
+        box-shadow: 0 15px 25px rgba(0,0,0,0.9), inset 0 2px 5px rgba(255,255,255,0.05);
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
         margin-bottom: 15px;
     }
     .product-card:hover { 
-        border-color: #D4AF37; 
-        transform: translateY(-5px);
-        box-shadow: 0 8px 20px rgba(212, 175, 55, 0.2);
+        transform: translateY(-12px) scale(1.02); 
+        box-shadow: 0 20px 35px rgba(0, 229, 255, 0.3), inset 0 2px 5px rgba(255,255,255,0.1); 
+        border-bottom: 4px solid #FFCC00;
     }
     
+    /* FORCES PERFECT SQUARE ASPECT RATIOS FOR ALL PRO SHOP IMAGES */
     .product-card img { 
-        border-radius: 4px; 
+        border-radius: 8px; 
+        border: 2px solid #00E5FF; 
+        box-shadow: 0 5px 15px rgba(0,0,0,0.8); 
         margin-bottom: 15px; 
         width: 100%; 
         aspect-ratio: 1 / 1; 
         object-fit: cover; 
     }
     
-    .price-tag { color: #ffffff; font-size: 20px; font-weight: 700; margin: 10px 0; }
-    .weight-tag { color: #888; font-size: 14px; font-weight: 400; }
+    .price-tag { color: #00E5FF; font-size: 24px; font-weight: 900; text-shadow: 0 0 10px rgba(0, 229, 255, 0.4); margin: 5px 0; }
+    .weight-tag { color: #FFCC00; font-size: 14px; font-weight: bold; }
     
-    /* Energetic Solid Buttons */
+    /* Animated Pulse Button - Hover turns AGGRESSIVE RED */
     .stButton>button { 
-        background-color: #D4AF37; 
+        background-color: #FFCC00; 
         color: #000000; 
-        font-weight: 800; 
-        font-size: 14px;
-        letter-spacing: 2px;
-        border-radius: 4px; 
+        font-weight: 900; 
+        font-size: 16px;
+        letter-spacing: 1px;
+        border-radius: 8px; 
         border: none; 
         width: 100%;
-        transition: all 0.3s ease;
+        transition: 0.3s;
         text-transform: uppercase;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        margin-top: 10px;
+        animation: pulse-yellow 2s infinite;
     }
     .stButton>button:hover { 
-        background-color: #ffffff; 
-        color: #000000;
-        transform: translateY(-3px);
-        box-shadow: 0 8px 20px rgba(212, 175, 55, 0.6); 
+        background-color: #E60000; 
+        color: #ffffff;
+        animation: none;
+        box-shadow: 0 0 25px rgba(230, 0, 0, 0.8); 
+        border: 1px solid #ff9999;
     }
     
-    /* Input Fields Styling to match theme */
-    .stTextInput input {
-        border: 1px solid #333 !important;
-        background-color: #0a0a0a !important;
-        color: #D4AF37 !important;
+    @keyframes pulse-yellow {
+        0% { box-shadow: 0 0 0 0 rgba(255, 204, 0, 0.7); }
+        70% { box-shadow: 0 0 0 10px rgba(255, 204, 0, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(255, 204, 0, 0); }
     }
-    
-    /* Professional Footer */
-    .footer {
-        text-align: center;
-        padding: 40px 0 20px 0;
-        margin-top: 50px;
-        border-top: 1px solid #1a1a1a;
-        color: #666;
-        font-size: 12px;
-        letter-spacing: 1px;
-    }
-    
-    /* DISABLE IMAGE MAXIMIZE GLOBALLY */
-    button[title="View fullscreen"] { display: none !important; }
-    [data-testid="stImage"] img { pointer-events: none; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -158,15 +151,16 @@ try:
 except:
     df = pd.DataFrame(columns=['id', 'name', 'phone', 'expiry_date'])
 
-# --- SIDEBAR NAVIGATION ---
-st.sidebar.markdown("<br>", unsafe_allow_html=True)
-page = st.sidebar.radio("", ["Home Base", "Membership Plans", "Pro Shop", "Member Portal", "Admin Command"])
+# --- SIDEBAR NAVIGATION WITH BOTTOM TEXT LOGO ---
+st.sidebar.markdown("<h2 style='text-align: center;' class='blue-glow'>R1 FITNESS</h2>", unsafe_allow_html=True)
+page = st.sidebar.radio("SYSTEM MENU", ["Home Base", "Membership Plans", "Pro Shop", "Member Portal", "Admin Command"])
 
+# Pushes the logo to the bottom of the sidebar
 st.sidebar.markdown("<br><br><br><br><br><br><br>", unsafe_allow_html=True)
 st.sidebar.markdown("""
     <div style='text-align: center;'>
-        <h1 style='color: #D4AF37; font-size: 3.5rem; margin-bottom: -20px; letter-spacing: -2px; text-shadow: 0 0 10px rgba(212,175,55,0.3);'>R1</h1>
-        <h2 style='color: #ffffff; font-size: 1.2rem; letter-spacing: 4px; font-weight: 400;'>FITNESS</h2>
+        <h1 style='color: #FFCC00; font-family: "Arial Black", sans-serif; font-size: 4rem; margin-bottom: -25px; text-shadow: 0 0 15px rgba(255, 204, 0, 0.4);'>R1</h1>
+        <h2 style='color: #00E5FF; font-family: "Arial Black", sans-serif; font-size: 1.8rem; letter-spacing: 3px; text-shadow: 0 0 15px rgba(0, 229, 255, 0.4);'>FITNESS</h2>
     </div>
 """, unsafe_allow_html=True)
 
@@ -174,83 +168,91 @@ st.sidebar.markdown("""
 # 1. HOME BASE 
 # ==========================================
 if page == "Home Base":
-    st.markdown("<h1 style='font-size: 3.5rem; text-align: center;'>R1 <span style='color: #ffffff;'>FITNESS</span></h1>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center; color: #888; font-size: 1.2rem; letter-spacing: 4px; font-weight: 400; margin-bottom: 20px;'>ELEVATE YOUR STANDARD</p>", unsafe_allow_html=True)
+    st.markdown("<h1 style='font-size: 4.5rem; text-align: center; margin-bottom: 0;'>R1 <span style='color: #00E5FF;'>FITNESS</span></h1>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; color: #fff; font-size: 1.5rem; font-style: italic; letter-spacing: 3px;'>FOR GOOD LIFE</p>", unsafe_allow_html=True)
     
     st.image("https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop", use_container_width=True)
-    st.write("---")
+    
+    # Blood Red Quote Banner
+    st.markdown("""
+        <div class="quote-banner">
+            <h3>"BLOOD, SWEAT, AND RESPECT. FIRST TWO YOU GIVE, LAST ONE YOU EARN."</h3>
+        </div>
+    """, unsafe_allow_html=True)
     
     col_rules, col_bmi = st.columns([1.2, 1])
     
     with col_rules:
-        st.write("### CLUB HOURS")
+        st.write("### 🕒 GYM TIMINGS")
         st.markdown("""
-        <div style="background-color: #0f0f0f; border-left: 3px solid #D4AF37; padding: 25px; margin-bottom: 20px; border-radius: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);">
-            <h2 style="color: #ffffff; margin: 0; font-size: 2rem;">09:00 - 12:00</h2>
-            <p style="color: #D4AF37; font-weight: 700; margin: 0; letter-spacing: 2px; font-size: 12px;">OPEN SEVEN DAYS A WEEK</p>
+        <div style="background-color: #111; border-left: 5px solid #00E5FF; padding: 20px; margin-bottom: 15px; text-align: center; border-radius: 8px;">
+            <h2 style="color: #ffffff; margin: 0; font-size: 2.5rem;">09:00 - 12:00</h2>
+            <p style="color: #00E5FF; font-weight: bold; margin: 0; letter-spacing: 2px;">OPEN EVERY DAY</p>
         </div>
         """, unsafe_allow_html=True)
         
-        st.write("### CLUB POLICIES")
+        st.write("### 📜 RULES OF THE IRON")
         st.markdown("""
-        <ul style="color: #aaa; font-size: 1rem; line-height: 2;">
-            <li><strong style="color: #fff;">SMOKE-FREE ENVIRONMENT:</strong> Strictly enforced for health and safety.</li>
-            <li><strong style="color: #fff;">COMPLIMENTARY HYDRATION:</strong> Purified water stations available.</li>
-            <li><strong style="color: #fff;">EXECUTIVE LOCKER ROOMS:</strong> Secure, private changing facilities.</li>
+        <ul style="color: #ccc; font-size: 1.1rem; line-height: 1.8; background-color: rgba(17, 17, 17, 0.8); padding: 20px 40px; border-radius: 8px;">
+            <li><strong style="color: #FFCC00;">NO SMOKING:</strong> Strictly prohibited. Keep the air clean.</li>
+            <li><strong style="color: #FFCC00;">HYDRATION:</strong> Unlimited clean drinking water provided.</li>
+            <li><strong style="color: #FFCC00;">LOCKER ROOMS:</strong> Secure rooms provided to change clothes.</li>
         </ul>
         """, unsafe_allow_html=True)
 
     with col_bmi:
         st.image("https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=1470&auto=format&fit=crop", use_container_width=True)
-        st.markdown("<div style='background-color: #0f0f0f; padding: 30px; border-radius: 4px; margin-top: 15px; border: 1px solid #1a1a1a; box-shadow: 0 4px 15px rgba(0,0,0,0.5);'>", unsafe_allow_html=True)
-        st.markdown("<h4 style='color: #fff; text-align: center; font-size: 16px; margin-bottom: 15px;'>BMI ASSESSMENT</h4>", unsafe_allow_html=True)
+        st.markdown("<div style='background-color: rgba(17,17,17,0.8); padding: 20px; border-radius: 8px; margin-top: 15px;'>", unsafe_allow_html=True)
+        st.markdown("<h4 style='color: #00E5FF; text-align: center;'>BMI CALCULATOR</h4>", unsafe_allow_html=True)
         weight = st.number_input("Weight (kg)", min_value=1.0, step=0.1)
         height = st.number_input("Height (cm)", min_value=1.0, step=0.1)
         
         if st.button("CALCULATE"):
             height_m = height / 100
             bmi = weight / (height_m ** 2)
-            st.success(f"**Your BMI Indicator: {round(bmi, 2)}**")
+            st.success(f"**Your BMI is: {round(bmi, 2)}**")
         st.markdown("</div>", unsafe_allow_html=True)
 
 # ==========================================
 # 2. MEMBERSHIP PLANS
 # ==========================================
 elif page == "Membership Plans":
-    st.markdown("<h1 style='text-align: center; font-size: 3rem; margin-bottom: 30px;'>MEMBERSHIP <span style='color: #ffffff;'>TIERS</span></h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center; font-size: 3.5rem;'>CHOOSE YOUR <span style='color: #00E5FF;'>WEAPON</span></h1><br>", unsafe_allow_html=True)
     
+    st.write("### 🔥 STANDARD TIERS")
     p1, p2, p3 = st.columns(3)
     
     with p1:
-        st.markdown("""<div class="custom-card"><h3>1 MONTH</h3><h2>₹1,000</h2><p style='color:#888; font-size:14px; line-height: 2;'>Full Club Access<br>Standard Equipment</p></div>""", unsafe_allow_html=True)
-        if st.button("INQUIRE NOW", key="btn1"): st.success("Visit the concierge to activate your 1-Month Plan.")
+        st.markdown("""<div class="custom-card"><h3>1 MONTH</h3><h2>₹1000</h2><p>Full gym access<br>Standard equipment</p></div>""", unsafe_allow_html=True)
+        if st.button("JOIN NOW", key="btn1"): st.success("Visit the front desk to activate your 1-Month Plan!")
         
     with p2:
-        st.markdown("""<div class="custom-card"><h3>3 MONTHS</h3><h2>₹2,000</h2><p style='color:#888; font-size:14px; line-height: 2;'>Full Club Access<br>Nutrition Consultation</p></div>""", unsafe_allow_html=True)
-        if st.button("INQUIRE NOW", key="btn2"): st.success("Visit the concierge to activate your 3-Month Plan.")
+        st.markdown("""<div class="custom-card"><h3>3 MONTHS</h3><h2>₹2000</h2><p>Full gym access<br>Diet consultation</p></div>""", unsafe_allow_html=True)
+        if st.button("JOIN NOW", key="btn2"): st.success("Visit the front desk to activate your 3-Month Plan!")
         
     with p3:
-        st.markdown("""<div class="custom-card"><h3>1 YEAR</h3><h2>₹5,000</h2><p style='color:#888; font-size:14px; line-height: 2;'>Full Club Access<br>Personal Training Assessment</p></div>""", unsafe_allow_html=True)
-        if st.button("INQUIRE NOW", key="btn3"): st.success("Visit the concierge to activate your 1-Year Plan.")
+        st.markdown("""<div class="custom-card"><h3>1 YEAR</h3><h2>₹5000</h2><p>Personal training prep<br><strong>Best Value!</strong></p></div>""", unsafe_allow_html=True)
+        if st.button("JOIN NOW", key="btn3"): st.success("Visit the front desk to activate your 1-Year Plan!")
         
-    st.write("---")
-    st.write("### ELITE MEMBERSHIPS")
+    st.divider()
+    st.write("### 💎 LUXURY & ELITE TIERS")
     p4, p5 = st.columns(2)
     
     with p4:
-        st.markdown("""<div class="custom-card" style="border-color: #D4AF37;"> <h3 style="color:#D4AF37;">VIP ELITE</h3><h2>₹35,000</h2><p style='color:#888; font-size:14px; line-height: 2;'>1 Year Access<br>Dedicated Personal Trainer<br>Monthly Supplement Allocation</p></div>""", unsafe_allow_html=True)
-        if st.button("APPLY FOR VIP", key="btn4"): st.success("Visit the concierge for VIP Onboarding.")
+        # RED injected into the VIP tier
+        st.markdown("""<div class="custom-card" style="border-top: 5px solid #E60000; box-shadow: 0 4px 15px rgba(230, 0, 0, 0.15);"> <h3 style="color:#E60000;">VIP ELITE</h3><h2>₹35,000</h2><p>1 Year Access<br>Dedicated Trainer<br>Free Monthly Supplements</p></div>""", unsafe_allow_html=True)
+        if st.button("BECOME VIP", key="btn4"): st.success("Visit the front desk for VIP Onboarding!")
         
     with p5:
-        st.markdown("""<div class="custom-card" style="background-color: #D4AF37;"> <h3 style="color:#000;">ULTIMATE PERSONAL</h3><h2 style="color:#000;">₹1,00,000</h2><p style='color:#333; font-size:14px; line-height: 2;'>Ultimate 1 Year Access<br><strong>Swimming Pool & Garden Access</strong><br>Exclusive Lounge Access</p></div>""", unsafe_allow_html=True)
-        if st.button("APPLY FOR ULTIMATE", key="btn5"): st.success("Visit the concierge for Ultimate Onboarding.")
+        st.markdown("""<div class="custom-card" style="border-top: 5px solid #ffffff; background-color: #0a0a0a;"> <h3 style="color:#ffffff;">PERSONAL PLAN</h3><h2 style="color: #00E5FF;">₹1,00,000</h2><p>Ultimate 1 Year Access<br><strong style="color:#FFCC00;">Access to Swimming Pool & Garden</strong><br>Exclusive Smoking Zone Lounge</p></div>""", unsafe_allow_html=True)
+        if st.button("BECOME A LEGEND", key="btn5"): st.success("Visit the front desk for Ultimate Onboarding!")
 
 # ==========================================
 # 3. PRO SHOP 
 # ==========================================
 elif page == "Pro Shop":
-    st.markdown("<h1 style='text-align: center;'>R1 <span style='color: #ffffff;'>BOUTIQUE</span></h1>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center; color: #888; letter-spacing: 2px; margin-bottom: 30px;'>PREMIUM SUPPLEMENTS & GEAR</p>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center;'>R1 <span style='color: #00E5FF;'>PRO SHOP</span></h1>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; color: #ccc;'>Fuel your workouts with premium gear and supplements.</p><br>", unsafe_allow_html=True)
     
     s1, s2, s3, s4 = st.columns(4)
     
@@ -258,64 +260,58 @@ elif page == "Pro Shop":
         st.markdown("""
         <div class="product-card">
             <img src="https://images.unsplash.com/photo-1594882645126-14020914d58d?q=80&w=500&auto=format&fit=crop">
-            <h4 style="color: #fff; margin-bottom: 0; font-size: 14px;">WHEY PROTEIN ISOLATE</h4>
+            <h4 style="color: #fff; margin-bottom: 0;">100% WHEY PROTEIN</h4>
             <div class="price-tag">₹1,800 <span class="weight-tag">/ 500g</span></div>
         </div>
         """, unsafe_allow_html=True)
-        if st.button("PURCHASE", key="shop1"): st.info("Item held at concierge desk.")
+        if st.button("BUY NOW", key="shop1"): st.info("Item added to desk pickup.")
         
     with s2:
         st.markdown("""
         <div class="product-card">
             <img src="https://images.unsplash.com/photo-1550345332-09e3ac987658?q=80&w=500&auto=format&fit=crop">
-            <h4 style="color: #fff; margin-bottom: 0; font-size: 14px;">PRE-WORKOUT FORMULA</h4>
+            <h4 style="color: #fff; margin-bottom: 0;">PRE-WORKOUT ENERGY</h4>
             <div class="price-tag">₹1,200 <span class="weight-tag">/ 300g</span></div>
         </div>
         """, unsafe_allow_html=True)
-        if st.button("PURCHASE", key="shop2"): st.info("Item held at concierge desk.")
+        if st.button("BUY NOW", key="shop2"): st.info("Item added to desk pickup.")
         
     with s3:
         st.markdown("""
         <div class="product-card">
             <img src="https://images.unsplash.com/photo-1605296867304-46d5465a13f1?q=80&w=500&auto=format&fit=crop">
-            <h4 style="color: #fff; margin-bottom: 0; font-size: 14px;">MICRONIZED CREATINE</h4>
+            <h4 style="color: #fff; margin-bottom: 0;">PURE CREATINE</h4>
             <div class="price-tag">₹800 <span class="weight-tag">/ 250g</span></div>
         </div>
         """, unsafe_allow_html=True)
-        if st.button("PURCHASE", key="shop3"): st.info("Item held at concierge desk.")
+        if st.button("BUY NOW", key="shop3"): st.info("Item added to desk pickup.")
         
     with s4:
         st.markdown("""
         <div class="product-card">
             <img src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=500&auto=format&fit=crop">
-            <h4 style="color: #fff; margin-bottom: 0; font-size: 14px;">PREMIUM LIFTING BELT</h4>
+            <h4 style="color: #fff; margin-bottom: 0;">LEATHER LIFTING BELT</h4>
             <div class="price-tag">₹1,500 <span class="weight-tag">/ 1 pc</span></div>
         </div>
         """, unsafe_allow_html=True)
-        if st.button("PURCHASE", key="shop4"): st.info("Item held at concierge desk.")
+        if st.button("BUY NOW", key="shop4"): st.info("Item added to desk pickup.")
 
 # ==========================================
-# 4. MEMBER PORTAL (SPLIT SCREEN LAYOUT)
+# 4. MEMBER PORTAL 
 # ==========================================
 elif page == "Member Portal":
-    st.markdown("<h1 style='text-align: center; font-size: 3rem; margin-bottom: 40px;'>MEMBER <span style='color: #ffffff;'>PORTAL</span></h1>", unsafe_allow_html=True)
+    st.markdown("""
+    <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+        <img src="https://images.unsplash.com/photo-1574680096145-d05b474e2155?q=80&w=1470&auto=format&fit=crop" style="width: 70%; height: 250px; object-fit: cover; border-radius: 12px; pointer-events: none; border: 2px solid #333; box-shadow: 0 10px 20px rgba(0,0,0,0.8);">
+    </div>
+    """, unsafe_allow_html=True)
     
-    col_img, col_form = st.columns([1.2, 1], gap="large")
+    st.markdown("<h1 style='text-align: center; font-size: 3.5rem; margin-top: 10px;'>MEMBER <span style='color: #00E5FF;'>PORTAL</span></h1>", unsafe_allow_html=True)
     
-    with col_img:
-        st.image("https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1000&auto=format&fit=crop", use_container_width=True)
-        st.markdown("""
-        <div style="background-color: #D4AF37; padding: 15px; border-radius: 4px; text-align: center; margin-top: -10px; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">
-            <h4 style="color: #000; margin: 0; font-style: italic; font-size: 14px;">"IT NEVER GETS EASIER, YOU JUST GET STRONGER."</h4>
-        </div>
-        """, unsafe_allow_html=True)
-        
-    with col_form:
-        st.write("<br>", unsafe_allow_html=True)
-        st.write("### 🔑 IDENTITY VERIFICATION")
-        st.write("<p style='color:#888; font-size:14px;'>Please enter your registered R1 ID to access your profile and membership status.</p>", unsafe_allow_html=True)
-        
-        member_id = st.text_input("Member ID", placeholder="e.g. R1-001")
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        st.write("---")
+        member_id = st.text_input("ENTER MEMBER ID", placeholder="e.g. R1-001")
         
         if st.button("VERIFY CLEARANCE"):
             df['id'] = df['id'].astype(str).str.replace(r'\.0$', '', regex=True).str.strip().str.upper()
@@ -326,64 +322,43 @@ elif page == "Member Portal":
                 name = user_data.iloc[0]['name']
                 expiry_str = str(user_data.iloc[0]['expiry_date'])
                 
-                st.success(f"### WELCOME, {name.upper()}")
-                st.info(f"**Valid Through:** {expiry_str}")
+                st.success(f"### WELCOME BACK, {name}!")
+                st.info(f"**Membership Expiry Date:** {expiry_str}")
                 
                 try:
                     expiry = datetime.strptime(expiry_str, '%Y-%m-%d').date()
                     if expiry < date.today():
-                        st.error("Membership Expired. Please see concierge.")
+                        st.error("⚠️ YOUR MEMBERSHIP HAS EXPIRED. PLEASE VISIT THE DESK TO RENEW.")
                     else:
-                        st.success("Status: Active.")
+                        st.success("✅ YOUR MEMBERSHIP IS ACTIVE.")
                 except:
-                    st.warning("Date format error.")
+                    st.warning("Could not verify exact date format.")
             else:
-                st.error("Credential not recognized.")
+                st.error("❌ MEMBER ID NOT FOUND IN DATABASE.")
+        st.write("---")
 
 # ==========================================
-# 5. ADMIN COMMAND CENTER (SPLIT SCREEN LAYOUT)
+# 5. ADMIN COMMAND CENTER 
 # ==========================================
 elif page == "Admin Command":
-    st.markdown("<h1 style='text-align: center; font-size: 3rem; margin-bottom: 40px;'>OPERATIONS <span style='color: #ffffff;'>DASHBOARD</span></h1>", unsafe_allow_html=True)
+    st.markdown("""
+    <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1470&auto=format&fit=crop" style="width: 70%; height: 250px; object-fit: cover; border-radius: 12px; pointer-events: none; border: 2px solid #333; box-shadow: 0 10px 20px rgba(0,0,0,0.8);">
+    </div>
+    """, unsafe_allow_html=True)
     
-    # Check if logged in using session state
-    if 'admin_logged_in' not in st.session_state:
-        st.session_state.admin_logged_in = False
-
-    if not st.session_state.admin_logged_in:
-        col_img, col_form = st.columns([1.2, 1], gap="large")
-        
-        with col_img:
-            st.image("https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=1000&auto=format&fit=crop", use_container_width=True)
-            st.markdown("""
-            <div style="background-color: #D4AF37; padding: 15px; border-radius: 4px; text-align: center; margin-top: -10px; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">
-                <h4 style="color: #000; margin: 0; font-style: italic; font-size: 14px;">"LEADERSHIP IS AN ACTION, NOT A POSITION."</h4>
-            </div>
-            """, unsafe_allow_html=True)
-            
-        with col_form:
-            st.write("<br>", unsafe_allow_html=True)
-            st.write("### 🔐 SYSTEM LOCKDOWN")
-            st.write("<p style='color:#888; font-size:14px;'>Restricted access. Please authenticate to view database records.</p>", unsafe_allow_html=True)
-            password = st.text_input("Administrator Password", type="password", placeholder="Enter Override Code")
-            
-            if st.button("AUTHENTICATE"):
-                if password == "admin123":
-                    st.session_state.admin_logged_in = True
-                    st.rerun()
-                elif password != "":
-                    st.error("Authentication failed.")
+    # RED injected into the Admin Header
+    st.markdown("<h1 style='text-align: center; font-size: 3.5rem; margin-top: 10px;'>COMMAND <span class='red-glow'>CENTER</span></h1>", unsafe_allow_html=True)
     
-    # If logged in, show the full dashboard
-    if st.session_state.admin_logged_in:
-        if st.button("🔒 LOG OUT"):
-            st.session_state.admin_logged_in = False
-            st.rerun()
+    # RED injected into the Security Lock text
+    st.markdown("<h3 style='text-align: center; color: #E60000;'>🔐 SYSTEM LOCKDOWN</h3>", unsafe_allow_html=True)
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        password = st.text_input("ENTER OVERRIDE CODE", type="password", label_visibility="collapsed", placeholder="Enter Password")
             
-        st.success("Authentication successful.")
-        st.write("---")
+    if password == "admin123": 
+        st.success("ACCESS GRANTED. WELCOME, COMMANDER.")
         
-        # AUTONOMOUS EXPIRED MEMBER DELETION
         if not df.empty:
             try:
                 df['date_obj'] = pd.to_datetime(df['expiry_date'], errors='coerce').dt.date
@@ -394,78 +369,41 @@ elif page == "Admin Command":
                     num_deleted = expired_mask.sum()
                     df = df[~expired_mask]
                     conn.update(worksheet="Members", data=df.drop(columns=['date_obj']))
-                    st.toast(f"System Routine: Purged {num_deleted} expired accounts.")
+                    st.toast(f"🧹 SYSTEM PURGE: Automatically removed {num_deleted} expired member(s) from database.")
             except:
                 pass
-
-        # LIVE METRICS DASHBOARD
-        st.write("### 📊 REAL-TIME METRICS")
-        m1, m2, m3 = st.columns(3)
-        with m1:
-            st.metric(label="Total Active Members", value=len(df))
-        with m2:
-            if not df.empty and 'date_obj' in df.columns:
-                expiring_7_days = len(df[(df['date_obj'] <= today + pd.Timedelta(days=7))])
-                st.metric(label="Expiring in 7 Days", value=expiring_7_days)
-            else:
-                st.metric(label="Expiring in 7 Days", value=0)
-        with m3:
-            # EXPORT BUTTON
-            if not df.empty:
-                csv_data = df.drop(columns=['date_obj']) if 'date_obj' in df.columns else df
-                csv = csv_data.to_csv(index=False).encode('utf-8')
-                st.download_button(
-                    label="📥 EXPORT DATABASE",
-                    data=csv,
-                    file_name=f"R1_Members_{date.today()}.csv",
-                    mime="text/csv",
-                )
-        st.write("---")
-
-        with st.expander("➕ REGISTER NEW CLIENT"):
-            st.markdown("<div style='background-color: #0f0f0f; padding: 20px; border-radius: 4px; border: 1px solid #1a1a1a;'>", unsafe_allow_html=True)
-            new_id = st.text_input("Member ID (Must start with 'R1-')")
+        
+        with st.expander("➕ REGISTER NEW MEMBER"):
+            new_id = st.text_input("Member ID (e.g., R1-001)")
             new_name = st.text_input("Full Name")
-            new_phone = st.text_input("Phone Number (10 Digits)")
+            new_phone = st.text_input("Phone Number")
             new_expiry = st.date_input("Membership Expiry Date")
             
-            if st.button("SAVE TO SECURE CLOUD"):
-                clean_new_id = str(new_id).strip().upper()
-                clean_phone = str(new_phone).strip()
+            if st.button("UPLOAD TO DATABASE"):
                 existing_ids = df['id'].astype(str).str.replace(r'\.0$', '', regex=True).str.strip().str.upper().tolist()
+                clean_new_id = str(new_id).strip().upper()
                 
-                if not clean_new_id.startswith("R1-"):
-                    st.error("Validation Error: Member ID must begin with 'R1-' (e.g., R1-001)")
-                elif len(clean_phone) != 10 or not clean_phone.isdigit():
-                    st.error("Validation Error: Phone number must be exactly 10 digits.")
-                elif clean_new_id in existing_ids:
-                    st.error("Validation Error: Member ID already exists in the system.")
+                if clean_new_id in existing_ids:
+                    st.error("❌ ID ALREADY EXISTS IN MAINFRAME.")
                 else:
                     new_row = pd.DataFrame([{
                         'id': clean_new_id, 
                         'name': new_name, 
-                        'phone': clean_phone, 
+                        'phone': new_phone, 
                         'expiry_date': new_expiry.strftime('%Y-%m-%d')
                     }])
                     updated_df = pd.concat([df, new_row], ignore_index=True)
                     if 'date_obj' in updated_df.columns:
                         updated_df = updated_df.drop(columns=['date_obj'])
                     conn.update(worksheet="Members", data=updated_df)
-                    st.success("Client registered successfully.")
+                    st.success("✅ UPLOAD SUCCESSFUL! MEMBER ADDED TO CLOUD.")
                     st.rerun()
-            st.markdown("</div>", unsafe_allow_html=True)
 
-        st.write("<br>### 🗄️ CLIENT DIRECTORY", unsafe_allow_html=True)
+        st.divider()
+        st.write("### 📡 ACTIVE RADAR & MEMBER LOGS")
         if not df.empty:
+            st.write("#### COMPLETE MAINFRAME LOG (ACTIVE MEMBERS ONLY)")
             display_df = df.drop(columns=['date_obj']) if 'date_obj' in df.columns else df
             st.dataframe(display_df, use_container_width=True)
-
-# --- GLOBAL FOOTER ---
-st.markdown("""
-    <div class="footer">
-        <strong>R1 FITNESS CLUB</strong><br>
-        123 Elite Avenue, Fitness District<br>
-        support@r1fitness.com | +91 98765 43210<br><br>
-        &copy; 2026 R1 Fitness. All Rights Reserved.
-    </div>
-""", unsafe_allow_html=True)
+    elif password != "":
+        st.error("❌ ACCESS DENIED. INCORRECT OVERRIDE CODE.")
