@@ -13,13 +13,12 @@ st.markdown("""
     
     .stApp { 
         background-color: #080808; 
-        /* The Neon Red Laser Stripe */
         background-image: repeating-linear-gradient(
             -45deg,
             #080808,
             #080808 40px,
             rgba(255, 0, 51, 0.02) 40px,
-            rgba(255, 0, 51, 0.12) 42px, /* Neon Red Core */
+            rgba(255, 0, 51, 0.12) 42px,
             rgba(255, 0, 51, 0.02) 44px
         );
         color: #e0e0e0; 
@@ -27,7 +26,7 @@ st.markdown("""
     }
     
     /* Clean, Elegant Typography */
-    h1, h2, h3, h4 { color: #D4AF37; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0px; }
+    h1, h2, h3, h4 { color: #D4AF37; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
     strong { color: #D4AF37; font-weight: 700; }
     
     /* Perfect Carbon Fibre Pattern for Sidebar */
@@ -94,7 +93,6 @@ st.markdown("""
         box-shadow: 0 8px 20px rgba(212, 175, 55, 0.2);
     }
     
-    /* Perfect Square Product Images */
     .product-card img { 
         border-radius: 4px; 
         margin-bottom: 15px; 
@@ -128,8 +126,12 @@ st.markdown("""
         box-shadow: 0 8px 20px rgba(212, 175, 55, 0.6); 
     }
     
-    /* Metrics Styling */
-    [data-testid="stMetricValue"] { color: #D4AF37; font-weight: 900; }
+    /* Input Fields Styling to match theme */
+    .stTextInput input {
+        border: 1px solid #333 !important;
+        background-color: #0a0a0a !important;
+        color: #D4AF37 !important;
+    }
     
     /* Professional Footer */
     .footer {
@@ -293,24 +295,29 @@ elif page == "Pro Shop":
         if st.button("PURCHASE", key="shop4"): st.info("Item held at concierge desk.")
 
 # ==========================================
-# 4. MEMBER PORTAL (TIGHTENED LAYOUT)
+# 4. MEMBER PORTAL (SPLIT SCREEN LAYOUT)
 # ==========================================
 elif page == "Member Portal":
-    st.markdown("""
-    <div style="display: flex; justify-content: center; margin-bottom: 15px;">
-        <img src="https://images.unsplash.com/photo-1574680096145-d05b474e2155?q=80&w=1470&auto=format&fit=crop" style="width: 80%; height: 250px; object-fit: cover; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.8);">
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center; font-size: 3rem; margin-bottom: 40px;'>MEMBER <span style='color: #ffffff;'>PORTAL</span></h1>", unsafe_allow_html=True)
     
-    st.markdown("<h1 style='text-align: center; font-size: 2.5rem; margin-bottom: 15px;'>MEMBER <span style='color: #ffffff;'>PORTAL</span></h1>", unsafe_allow_html=True)
+    col_img, col_form = st.columns([1.2, 1], gap="large")
     
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        st.markdown("<div style='background-color:#0f0f0f; padding:30px; border-radius:8px; border: 1px solid #1a1a1a; box-shadow: 0 10px 25px rgba(0,0,0,0.5);'>", unsafe_allow_html=True)
-        st.markdown("<h3 style='color:#D4AF37; font-size:16px; margin-bottom: 15px; text-align: center;'>SYSTEM ACCESS</h3>", unsafe_allow_html=True)
-        member_id = st.text_input("ENTER MEMBER ID", placeholder="e.g. R1-001", label_visibility="collapsed")
+    with col_img:
+        st.image("https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1000&auto=format&fit=crop", use_container_width=True)
+        st.markdown("""
+        <div style="background-color: #D4AF37; padding: 15px; border-radius: 4px; text-align: center; margin-top: -10px; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">
+            <h4 style="color: #000; margin: 0; font-style: italic; font-size: 14px;">"IT NEVER GETS EASIER, YOU JUST GET STRONGER."</h4>
+        </div>
+        """, unsafe_allow_html=True)
         
-        if st.button("VERIFY IDENTITY"):
+    with col_form:
+        st.write("<br>", unsafe_allow_html=True)
+        st.write("### 🔑 IDENTITY VERIFICATION")
+        st.write("<p style='color:#888; font-size:14px;'>Please enter your registered R1 ID to access your profile and membership status.</p>", unsafe_allow_html=True)
+        
+        member_id = st.text_input("Member ID", placeholder="e.g. R1-001")
+        
+        if st.button("VERIFY CLEARANCE"):
             df['id'] = df['id'].astype(str).str.replace(r'\.0$', '', regex=True).str.strip().str.upper()
             clean_search_id = str(member_id).strip().upper()
             user_data = df[df['id'] == clean_search_id]
@@ -332,22 +339,47 @@ elif page == "Member Portal":
                     st.warning("Date format error.")
             else:
                 st.error("Credential not recognized.")
-        st.markdown("</div>", unsafe_allow_html=True)
 
 # ==========================================
-# 5. ADMIN COMMAND CENTER (TIGHTENED LAYOUT)
+# 5. ADMIN COMMAND CENTER (SPLIT SCREEN LAYOUT)
 # ==========================================
 elif page == "Admin Command":
-    st.markdown("<h1 style='text-align: center; font-size: 2.5rem; margin-top: 0; margin-bottom: 20px;'>OPERATIONS <span style='color: #ffffff;'>DASHBOARD</span></h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center; font-size: 3rem; margin-bottom: 40px;'>OPERATIONS <span style='color: #ffffff;'>DASHBOARD</span></h1>", unsafe_allow_html=True)
     
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        st.markdown("<div style='background-color:#0f0f0f; padding:30px; border-radius:8px; border: 1px solid #1a1a1a; text-align:center; box-shadow: 0 10px 25px rgba(0,0,0,0.5);'>", unsafe_allow_html=True)
-        st.markdown("<h3 style='color:#D4AF37; margin-bottom:15px; font-size:18px;'>SECURITY CHECKPOINT</h3>", unsafe_allow_html=True)
-        password = st.text_input("ADMINISTRATOR PASSWORD", type="password", placeholder="Enter Override Code", label_visibility="collapsed")
-        st.markdown("</div>", unsafe_allow_html=True)
+    # Check if logged in using session state
+    if 'admin_logged_in' not in st.session_state:
+        st.session_state.admin_logged_in = False
+
+    if not st.session_state.admin_logged_in:
+        col_img, col_form = st.columns([1.2, 1], gap="large")
+        
+        with col_img:
+            st.image("https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=1000&auto=format&fit=crop", use_container_width=True)
+            st.markdown("""
+            <div style="background-color: #D4AF37; padding: 15px; border-radius: 4px; text-align: center; margin-top: -10px; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">
+                <h4 style="color: #000; margin: 0; font-style: italic; font-size: 14px;">"LEADERSHIP IS AN ACTION, NOT A POSITION."</h4>
+            </div>
+            """, unsafe_allow_html=True)
             
-    if password == "admin123": 
+        with col_form:
+            st.write("<br>", unsafe_allow_html=True)
+            st.write("### 🔐 SYSTEM LOCKDOWN")
+            st.write("<p style='color:#888; font-size:14px;'>Restricted access. Please authenticate to view database records.</p>", unsafe_allow_html=True)
+            password = st.text_input("Administrator Password", type="password", placeholder="Enter Override Code")
+            
+            if st.button("AUTHENTICATE"):
+                if password == "admin123":
+                    st.session_state.admin_logged_in = True
+                    st.rerun()
+                elif password != "":
+                    st.error("Authentication failed.")
+    
+    # If logged in, show the full dashboard
+    if st.session_state.admin_logged_in:
+        if st.button("🔒 LOG OUT"):
+            st.session_state.admin_logged_in = False
+            st.rerun()
+            
         st.success("Authentication successful.")
         st.write("---")
         
@@ -427,9 +459,6 @@ elif page == "Admin Command":
         if not df.empty:
             display_df = df.drop(columns=['date_obj']) if 'date_obj' in df.columns else df
             st.dataframe(display_df, use_container_width=True)
-            
-    elif password != "":
-        st.error("Authentication failed.")
 
 # --- GLOBAL FOOTER ---
 st.markdown("""
