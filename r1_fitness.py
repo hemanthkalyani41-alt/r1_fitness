@@ -30,6 +30,7 @@ st.markdown("""
     /* Bold Accents */
     h1, h2, h3, h4 { color: #FFCC00; font-family: 'Arial Black', sans-serif; text-transform: uppercase; text-shadow: 0px 0px 10px rgba(255, 204, 0, 0.2); }
     .blue-glow { color: #00E5FF; text-shadow: 0px 0px 15px rgba(0, 229, 255, 0.6); }
+    .red-glow { color: #E60000; text-shadow: 0px 0px 15px rgba(230, 0, 0, 0.6); }
     strong { color: #00E5FF; font-weight: 900; }
     
     /* Realistic 3D Carbon Fibre Pattern for Sidebar & Cards */
@@ -61,6 +62,18 @@ st.markdown("""
     .custom-card:hover { transform: translateY(-10px); box-shadow: 0 8px 25px rgba(0, 229, 255, 0.4); }
     .custom-card h3 { color: #00E5FF; margin-bottom: 10px; font-size: 24px;}
     .custom-card h2 { color: #ffffff; margin-bottom: 10px; font-size: 32px;}
+    
+    /* Quote Banner - Changed to Deep Red */
+    .quote-banner {
+        background-color: #990000;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        margin: 30px 0;
+        box-shadow: 0 0 20px rgba(153, 0, 0, 0.5);
+        border: 1px solid #ff3333;
+    }
+    .quote-banner h3 { color: #ffffff; margin: 0; font-style: italic; letter-spacing: 1px; text-shadow: none; }
     
     /* 3D Carbon Fibre Product Cards */
     .product-card {
@@ -100,7 +113,7 @@ st.markdown("""
     .price-tag { color: #00E5FF; font-size: 24px; font-weight: 900; text-shadow: 0 0 10px rgba(0, 229, 255, 0.4); margin: 5px 0; }
     .weight-tag { color: #FFCC00; font-size: 14px; font-weight: bold; }
     
-    /* Animated Pulse Button */
+    /* Animated Pulse Button - Hover turns AGGRESSIVE RED */
     .stButton>button { 
         background-color: #FFCC00; 
         color: #000000; 
@@ -115,10 +128,11 @@ st.markdown("""
         animation: pulse-yellow 2s infinite;
     }
     .stButton>button:hover { 
-        background-color: #00E5FF; 
-        color: #000000;
+        background-color: #E60000; 
+        color: #ffffff;
         animation: none;
-        box-shadow: 0 0 20px rgba(0, 229, 255, 0.8); 
+        box-shadow: 0 0 25px rgba(230, 0, 0, 0.8); 
+        border: 1px solid #ff9999;
     }
     
     @keyframes pulse-yellow {
@@ -158,6 +172,13 @@ if page == "Home Base":
     st.markdown("<p style='text-align: center; color: #fff; font-size: 1.5rem; font-style: italic; letter-spacing: 3px;'>FOR GOOD LIFE</p>", unsafe_allow_html=True)
     
     st.image("https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop", use_container_width=True)
+    
+    # Blood Red Quote Banner
+    st.markdown("""
+        <div class="quote-banner">
+            <h3>"BLOOD, SWEAT, AND RESPECT. FIRST TWO YOU GIVE, LAST ONE YOU EARN."</h3>
+        </div>
+    """, unsafe_allow_html=True)
     
     col_rules, col_bmi = st.columns([1.2, 1])
     
@@ -218,7 +239,8 @@ elif page == "Membership Plans":
     p4, p5 = st.columns(2)
     
     with p4:
-        st.markdown("""<div class="custom-card" style="border-top: 5px solid #FFCC00;"> <h3 style="color:#FFCC00;">VIP ELITE</h3><h2>₹35,000</h2><p>1 Year Access<br>Dedicated Trainer<br>Free Monthly Supplements</p></div>""", unsafe_allow_html=True)
+        # RED injected into the VIP tier
+        st.markdown("""<div class="custom-card" style="border-top: 5px solid #E60000; box-shadow: 0 4px 15px rgba(230, 0, 0, 0.15);"> <h3 style="color:#E60000;">VIP ELITE</h3><h2>₹35,000</h2><p>1 Year Access<br>Dedicated Trainer<br>Free Monthly Supplements</p></div>""", unsafe_allow_html=True)
         if st.button("BECOME VIP", key="btn4"): st.success("Visit the front desk for VIP Onboarding!")
         
     with p5:
@@ -275,10 +297,9 @@ elif page == "Pro Shop":
         if st.button("BUY NOW", key="shop4"): st.info("Item added to desk pickup.")
 
 # ==========================================
-# 4. MEMBER PORTAL (SMALLER & LOCKED IMAGE)
+# 4. MEMBER PORTAL 
 # ==========================================
 elif page == "Member Portal":
-    # Using custom HTML for a smaller, unclickable banner image
     st.markdown("""
     <div style="display: flex; justify-content: center; margin-bottom: 20px;">
         <img src="https://images.unsplash.com/photo-1574680096145-d05b474e2155?q=80&w=1470&auto=format&fit=crop" style="width: 70%; height: 250px; object-fit: cover; border-radius: 12px; pointer-events: none; border: 2px solid #333; box-shadow: 0 10px 20px rgba(0,0,0,0.8);">
@@ -317,19 +338,20 @@ elif page == "Member Portal":
         st.write("---")
 
 # ==========================================
-# 5. ADMIN COMMAND CENTER (SMALLER & LOCKED IMAGE)
+# 5. ADMIN COMMAND CENTER 
 # ==========================================
 elif page == "Admin Command":
-    # Using custom HTML for a smaller, unclickable banner image
     st.markdown("""
     <div style="display: flex; justify-content: center; margin-bottom: 20px;">
         <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1470&auto=format&fit=crop" style="width: 70%; height: 250px; object-fit: cover; border-radius: 12px; pointer-events: none; border: 2px solid #333; box-shadow: 0 10px 20px rgba(0,0,0,0.8);">
     </div>
     """, unsafe_allow_html=True)
     
-    st.markdown("<h1 style='text-align: center; font-size: 3.5rem; margin-top: 10px;'>COMMAND <span style='color: #00E5FF;'>CENTER</span></h1>", unsafe_allow_html=True)
+    # RED injected into the Admin Header
+    st.markdown("<h1 style='text-align: center; font-size: 3.5rem; margin-top: 10px;'>COMMAND <span class='red-glow'>CENTER</span></h1>", unsafe_allow_html=True)
     
-    st.markdown("<h3 style='text-align: center; color: #00E5FF;'>🔐 SYSTEM LOCK</h3>", unsafe_allow_html=True)
+    # RED injected into the Security Lock text
+    st.markdown("<h3 style='text-align: center; color: #E60000;'>🔐 SYSTEM LOCKDOWN</h3>", unsafe_allow_html=True)
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         password = st.text_input("ENTER OVERRIDE CODE", type="password", label_visibility="collapsed", placeholder="Enter Password")
@@ -337,7 +359,6 @@ elif page == "Admin Command":
     if password == "admin123": 
         st.success("ACCESS GRANTED. WELCOME, COMMANDER.")
         
-        # AUTONOMOUS EXPIRED MEMBER DELETION PROTOCOL
         if not df.empty:
             try:
                 df['date_obj'] = pd.to_datetime(df['expiry_date'], errors='coerce').dt.date
