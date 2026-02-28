@@ -21,13 +21,35 @@ st.markdown("""
     h1, h2, h3, h4 { color: #D4AF37; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
     strong { color: #D4AF37; font-weight: 700; }
     
-    /* Minimalist Sidebar */
+    /* Perfect Carbon Fibre Pattern for Sidebar */
     [data-testid="stSidebar"] { 
+        background:
+            radial-gradient(black 15%, transparent 16%) 0 0,
+            radial-gradient(black 15%, transparent 16%) 8px 8px,
+            radial-gradient(rgba(255,255,255,.05) 15%, transparent 20%) 0 1px,
+            radial-gradient(rgba(255,255,255,.05) 15%, transparent 20%) 8px 9px;
         background-color: #050505;
-        border-right: 1px solid #1a1a1a; 
+        background-size: 16px 16px;
+        border-right: 2px solid #D4AF37; 
+        box-shadow: 5px 0 25px rgba(212, 175, 55, 0.15); 
     }
-    .stRadio div[role="radiogroup"] label { transition: all 0.2s; padding: 12px; border-radius: 4px; margin-bottom: 2px; }
-    .stRadio div[role="radiogroup"] label:hover { background-color: #111; color: #D4AF37; padding-left: 20px; }
+    
+    /* Energetic Sidebar Menu Hover */
+    .stRadio div[role="radiogroup"] label { 
+        transition: all 0.3s ease-in-out; 
+        padding: 12px; 
+        border-radius: 6px; 
+        background-color: rgba(0,0,0,0.6); 
+        margin-bottom: 5px; 
+        border: 1px solid #1a1a1a; 
+    }
+    .stRadio div[role="radiogroup"] label:hover { 
+        transform: scale(1.05) translateX(10px); 
+        background-color: #000; 
+        color: #D4AF37; 
+        border-left: 4px solid #D4AF37; 
+        box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); 
+    }
     
     /* Elegant Custom Cards */
     .custom-card {
@@ -36,10 +58,14 @@ st.markdown("""
         border-radius: 8px;
         border: 1px solid #1a1a1a;
         text-align: center;
-        transition: transform 0.3s ease, border-color 0.3s ease;
+        transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
         margin-bottom: 20px;
     }
-    .custom-card:hover { transform: translateY(-5px); border-color: #D4AF37; }
+    .custom-card:hover { 
+        transform: translateY(-8px); 
+        border-color: #D4AF37; 
+        box-shadow: 0 10px 25px rgba(212, 175, 55, 0.15);
+    }
     .custom-card h3 { color: #ffffff; margin-bottom: 10px; font-size: 20px; font-weight: 400;}
     .custom-card h2 { color: #D4AF37; margin-bottom: 15px; font-size: 36px; font-weight: 900;}
     
@@ -50,10 +76,14 @@ st.markdown("""
         border-radius: 8px;
         border: 1px solid #1a1a1a;
         text-align: center;
-        transition: 0.3s ease;
+        transition: all 0.3s ease;
         margin-bottom: 15px;
     }
-    .product-card:hover { border-color: #D4AF37; }
+    .product-card:hover { 
+        border-color: #D4AF37; 
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(212, 175, 55, 0.2);
+    }
     
     /* Perfect Square Product Images */
     .product-card img { 
@@ -67,22 +97,25 @@ st.markdown("""
     .price-tag { color: #ffffff; font-size: 20px; font-weight: 700; margin: 10px 0; }
     .weight-tag { color: #888; font-size: 14px; font-weight: 400; }
     
-    /* Professional Solid Buttons (No Animations) */
+    /* Energetic Solid Buttons */
     .stButton>button { 
         background-color: #D4AF37; 
         color: #000000; 
-        font-weight: 700; 
+        font-weight: 800; 
         font-size: 14px;
         letter-spacing: 2px;
         border-radius: 4px; 
         border: none; 
         width: 100%;
-        transition: 0.2s;
+        transition: all 0.3s ease;
         text-transform: uppercase;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
     .stButton>button:hover { 
         background-color: #ffffff; 
         color: #000000;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(212, 175, 55, 0.6); 
     }
     
     /* Metrics Styling */
@@ -120,7 +153,7 @@ page = st.sidebar.radio("", ["Home Base", "Membership Plans", "Pro Shop", "Membe
 st.sidebar.markdown("<br><br><br><br><br><br><br>", unsafe_allow_html=True)
 st.sidebar.markdown("""
     <div style='text-align: center;'>
-        <h1 style='color: #D4AF37; font-size: 3.5rem; margin-bottom: -20px; letter-spacing: -2px;'>R1</h1>
+        <h1 style='color: #D4AF37; font-size: 3.5rem; margin-bottom: -20px; letter-spacing: -2px; text-shadow: 0 0 10px rgba(212,175,55,0.3);'>R1</h1>
         <h2 style='color: #ffffff; font-size: 1.2rem; letter-spacing: 4px; font-weight: 400;'>FITNESS</h2>
     </div>
 """, unsafe_allow_html=True)
@@ -140,7 +173,7 @@ if page == "Home Base":
     with col_rules:
         st.write("### CLUB HOURS")
         st.markdown("""
-        <div style="background-color: #0f0f0f; border-left: 3px solid #D4AF37; padding: 25px; margin-bottom: 20px; border-radius: 4px;">
+        <div style="background-color: #0f0f0f; border-left: 3px solid #D4AF37; padding: 25px; margin-bottom: 20px; border-radius: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);">
             <h2 style="color: #ffffff; margin: 0; font-size: 2rem;">09:00 - 12:00</h2>
             <p style="color: #D4AF37; font-weight: 700; margin: 0; letter-spacing: 2px; font-size: 12px;">OPEN SEVEN DAYS A WEEK</p>
         </div>
@@ -157,7 +190,7 @@ if page == "Home Base":
 
     with col_bmi:
         st.image("https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=1470&auto=format&fit=crop", use_container_width=True)
-        st.markdown("<div style='background-color: #0f0f0f; padding: 30px; border-radius: 4px; margin-top: 15px; border: 1px solid #1a1a1a;'>", unsafe_allow_html=True)
+        st.markdown("<div style='background-color: #0f0f0f; padding: 30px; border-radius: 4px; margin-top: 15px; border: 1px solid #1a1a1a; box-shadow: 0 4px 15px rgba(0,0,0,0.5);'>", unsafe_allow_html=True)
         st.markdown("<h4 style='color: #fff; text-align: center; font-size: 16px;'>BMI ASSESSMENT</h4><br>", unsafe_allow_html=True)
         weight = st.number_input("Weight (kg)", min_value=1.0, step=0.1)
         height = st.number_input("Height (cm)", min_value=1.0, step=0.1)
@@ -255,7 +288,7 @@ elif page == "Pro Shop":
 elif page == "Member Portal":
     st.markdown("""
     <div style="display: flex; justify-content: center; margin-bottom: 30px;">
-        <img src="https://images.unsplash.com/photo-1574680096145-d05b474e2155?q=80&w=1470&auto=format&fit=crop" style="width: 80%; height: 300px; object-fit: cover; border-radius: 4px;">
+        <img src="https://images.unsplash.com/photo-1574680096145-d05b474e2155?q=80&w=1470&auto=format&fit=crop" style="width: 80%; height: 300px; object-fit: cover; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.8);">
     </div>
     """, unsafe_allow_html=True)
     
@@ -263,7 +296,7 @@ elif page == "Member Portal":
     
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        st.markdown("<div style='background-color:#0f0f0f; padding:40px; border-radius:8px; border: 1px solid #1a1a1a;'>", unsafe_allow_html=True)
+        st.markdown("<div style='background-color:#0f0f0f; padding:40px; border-radius:8px; border: 1px solid #1a1a1a; box-shadow: 0 10px 25px rgba(0,0,0,0.5);'>", unsafe_allow_html=True)
         member_id = st.text_input("ENTER MEMBER ID", placeholder="e.g. R1-001")
         st.write("<br>", unsafe_allow_html=True)
         
@@ -292,7 +325,7 @@ elif page == "Member Portal":
         st.markdown("</div>", unsafe_allow_html=True)
 
 # ==========================================
-# 5. ADMIN COMMAND CENTER (UPGRADED WITH TOOLS)
+# 5. ADMIN COMMAND CENTER 
 # ==========================================
 elif page == "Admin Command":
     st.markdown("<h1 style='text-align: center; font-size: 2.5rem; margin-top: 20px;'>OPERATIONS <span style='color: #ffffff;'>DASHBOARD</span></h1><br>", unsafe_allow_html=True)
@@ -332,11 +365,11 @@ elif page == "Admin Command":
             else:
                 st.metric(label="Expiring in 7 Days", value=0)
         with m3:
-            # ONE CLICK EXCEL/CSV DOWNLOAD
+            # EXPORT BUTTON
             if not df.empty:
                 csv_data = df.drop(columns=['date_obj']) if 'date_obj' in df.columns else df
                 csv = csv_data.to_csv(index=False).encode('utf-8')
-                st.markdown("<br>", unsafe_allow_html=True) # spacing
+                st.markdown("<br>", unsafe_allow_html=True)
                 st.download_button(
                     label="📥 EXPORT DATABASE",
                     data=csv,
@@ -346,14 +379,13 @@ elif page == "Admin Command":
         st.write("---")
 
         with st.expander("➕ REGISTER NEW CLIENT"):
-            st.markdown("<div style='background-color: #0f0f0f; padding: 20px; border-radius: 4px;'>", unsafe_allow_html=True)
+            st.markdown("<div style='background-color: #0f0f0f; padding: 20px; border-radius: 4px; border: 1px solid #1a1a1a;'>", unsafe_allow_html=True)
             new_id = st.text_input("Member ID (Must start with 'R1-')")
             new_name = st.text_input("Full Name")
             new_phone = st.text_input("Phone Number (10 Digits)")
             new_expiry = st.date_input("Membership Expiry Date")
             
             if st.button("SAVE TO SECURE CLOUD"):
-                # ADVANCED DATA VALIDATION
                 clean_new_id = str(new_id).strip().upper()
                 clean_phone = str(new_phone).strip()
                 existing_ids = df['id'].astype(str).str.replace(r'\.0$', '', regex=True).str.strip().str.upper().tolist()
@@ -396,3 +428,4 @@ st.markdown("""
         &copy; 2026 R1 Fitness. All Rights Reserved.
     </div>
 """, unsafe_allow_html=True)
+
