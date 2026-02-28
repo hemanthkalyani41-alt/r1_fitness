@@ -4,14 +4,14 @@ from datetime import datetime, date
 from streamlit_gsheets import GSheetsConnection
 
 # --- APP STYLING & CONFIG ---
-st.set_page_config(page_title="R1 Fitness", page_icon="⚡", layout="wide")
+st.set_page_config(page_title="R1 Fitness", layout="wide")
 
 st.markdown("""
     <style>
     /* Main background and text colors */
     .stApp { background-color: #050505; color: #ffffff; }
     
-    /* Bold Yellow Accents & Lightning Vibe */
+    /* Bold Yellow Accents */
     h1, h2, h3, h4 { color: #FFCC00; font-family: 'Arial Black', sans-serif; text-transform: uppercase; text-shadow: 0px 0px 10px rgba(255, 204, 0, 0.2); }
     strong { color: #FFCC00; font-weight: 900; }
     
@@ -39,7 +39,7 @@ st.markdown("""
     }
     .quote-banner h3 { color: #000000; margin: 0; font-style: italic; letter-spacing: 1px; text-shadow: none; }
     
-    /* Button Styling - High Energy */
+    /* Button Styling */
     .stButton>button { 
         background-color: #FFCC00; 
         color: #000000; 
@@ -71,12 +71,13 @@ st.markdown("""
     
     /* Admin Restricted Box */
     .admin-box {
-        background-color: #1a0000;
-        border: 2px solid #ff3333;
+        background-color: #0a0000;
+        border: 1px solid #ff3333;
         padding: 30px;
         border-radius: 10px;
         text-align: center;
         margin-top: 20px;
+        box-shadow: 0 0 15px rgba(255, 51, 51, 0.2);
     }
     </style>
     """, unsafe_allow_html=True)
@@ -89,14 +90,14 @@ try:
 except:
     df = pd.DataFrame(columns=['id', 'name', 'phone', 'expiry_date'])
 
-# --- SIDEBAR NAVIGATION ---
-st.sidebar.title("⚡ R1 FITNESS")
-page = st.sidebar.radio("SYSTEM MENU", ["🏠 Home Base", "💎 Membership Plans", "⚡ Member Portal", "🛡️ Admin Command"])
+# --- SIDEBAR NAVIGATION (Clean text, no cartoon emojis) ---
+st.sidebar.markdown("<h2 style='text-align: center; color: #FFCC00;'>R1 FITNESS</h2>", unsafe_allow_html=True)
+page = st.sidebar.radio("SYSTEM MENU", ["Home Base", "Membership Plans", "Member Portal", "Admin Command"])
 
 # ==========================================
-# 1. HOME BASE (RULES, TIMINGS, BMI)
+# 1. HOME BASE 
 # ==========================================
-if page == "🏠 Home Base":
+if page == "Home Base":
     
     st.markdown("<h1 style='font-size: 4.5rem; text-align: center; margin-bottom: 0;'>R1 FITNESS</h1>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center; color: #fff; font-size: 1.5rem; font-style: italic; letter-spacing: 3px;'>FOR GOOD LIFE</p>", unsafe_allow_html=True)
@@ -112,7 +113,7 @@ if page == "🏠 Home Base":
     col_rules, col_bmi = st.columns([1.2, 1])
     
     with col_rules:
-        st.write("### 🕒 GYM TIMINGS")
+        st.write("### GYM TIMINGS")
         st.markdown("""
         <div class="info-box" style="text-align: center;">
             <h2 style="color: #ffffff; margin: 0; font-size: 2.5rem;">09:00 - 12:00</h2>
@@ -120,18 +121,18 @@ if page == "🏠 Home Base":
         </div>
         """, unsafe_allow_html=True)
         
-        st.write("### 📜 RULES OF THE IRON")
+        st.write("### RULES OF THE IRON")
         st.markdown("""
         <div class="info-box">
-            <h4 style="margin-top:0;">🚭 NO SMOKING</h4>
+            <h4 style="margin-top:0;">NO SMOKING</h4>
             <p style="color:#ccc; margin-bottom:0;">Strictly prohibited. Keep the air clean for those working hard.</p>
         </div>
         <div class="info-box">
-            <h4 style="margin-top:0;">💧 HYDRATION STATION</h4>
+            <h4 style="margin-top:0;">HYDRATION STATION</h4>
             <p style="color:#ccc; margin-bottom:0;">Unlimited clean drinking water is provided. Bring your shaker.</p>
         </div>
         <div class="info-box">
-            <h4 style="margin-top:0;">🎒 LOCKER ROOMS</h4>
+            <h4 style="margin-top:0;">LOCKER ROOMS</h4>
             <p style="color:#ccc; margin-bottom:0;">Separate, secure rooms provided to change out of your sweaty clothes.</p>
         </div>
         """, unsafe_allow_html=True)
@@ -154,9 +155,9 @@ if page == "🏠 Home Base":
 
 
 # ==========================================
-# 2. MEMBERSHIP PLANS (NEW DEDICATED PAGE)
+# 2. MEMBERSHIP PLANS
 # ==========================================
-elif page == "💎 Membership Plans":
+elif page == "Membership Plans":
     st.image("https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=1470&auto=format&fit=crop", use_container_width=True)
     st.markdown("<h1 style='text-align: center; font-size: 3.5rem; margin-top: 20px;'>CHOOSE YOUR WEAPON</h1>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center; color: #FFCC00; font-weight: 900; letter-spacing: 2px;'>NO CONTRACTS. JUST RESULTS.</p><br>", unsafe_allow_html=True)
@@ -192,21 +193,21 @@ elif page == "💎 Membership Plans":
 
 
 # ==========================================
-# 3. MEMBER PORTAL (HIGH VOLTAGE)
+# 3. MEMBER PORTAL (REVERTED TO CLEAN LAYOUT)
 # ==========================================
-elif page == "⚡ Member Portal":
+elif page == "Member Portal":
     st.image("https://images.unsplash.com/photo-1558691015-33cbabc4c277?q=80&w=1470&auto=format&fit=crop", use_container_width=True)
     
-    st.markdown("<h1 style='text-align: center; font-size: 3.5rem; margin-top: 20px;'>⚡ HIGH VOLTAGE PORTAL ⚡</h1>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center; color: #FFCC00; font-weight: 900; font-size: 1.2rem; letter-spacing: 2px;'>IGNITE YOUR PROFILE</p><br>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center; font-size: 3.5rem; margin-top: 20px;'>MEMBER PORTAL</h1>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; color: #FFCC00; font-weight: 900; font-size: 1.2rem; letter-spacing: 2px;'>ACCESS YOUR PROFILE</p><br>", unsafe_allow_html=True)
     
-    col_login, col_info = st.columns([1.5, 1])
+    col1, col2, col3 = st.columns([1, 2, 1])
     
-    with col_login:
-        st.write("### 🔑 SYSTEM ACCESS")
+    with col2:
+        st.markdown("<div class='info-box'>", unsafe_allow_html=True)
         member_id = st.text_input("ENTER MEMBER ID", placeholder="e.g. R1-001")
         
-        if st.button("⚡ VERIFY CLEARANCE"):
+        if st.button("VERIFY CLEARANCE"):
             df['id'] = df['id'].astype(str).str.replace(r'\.0$', '', regex=True).str.strip().str.upper()
             clean_search_id = str(member_id).strip().upper()
             user_data = df[df['id'] == clean_search_id]
@@ -215,5 +216,93 @@ elif page == "⚡ Member Portal":
                 name = user_data.iloc[0]['name']
                 expiry_str = str(user_data.iloc[0]['expiry_date'])
                 
-                st.markdown(f"<div class='info-box'><h3>WELCOME BACK, {name}!</h3></div>", unsafe_allow_html=True)
+                st.success(f"### WELCOME BACK, {name}!")
                 st.info(f"**Membership Expiry Date:** {expiry_str}")
+                
+                try:
+                    expiry = datetime.strptime(expiry_str, '%Y-%m-%d').date()
+                    if expiry < date.today():
+                        st.error("⚠️ YOUR MEMBERSHIP HAS EXPIRED. PLEASE VISIT THE DESK TO RENEW.")
+                    else:
+                        st.success("✅ YOUR MEMBERSHIP IS ACTIVE.")
+                except:
+                    st.warning("Could not verify exact date format.")
+            else:
+                st.error("❌ MEMBER ID NOT FOUND IN DATABASE.")
+        st.markdown("</div>", unsafe_allow_html=True)
+
+
+# ==========================================
+# 4. ADMIN COMMAND CENTER (REALISTIC & STRUCTURED)
+# ==========================================
+elif page == "Admin Command":
+    # Realistic Server/Data Center Image
+    st.image("https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1470&auto=format&fit=crop", use_container_width=True)
+    
+    st.markdown("<h1 style='text-align: center; font-size: 3.5rem; margin-top: 20px;'>COMMAND CENTER</h1>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; color: #ff3333; font-weight: 900; letter-spacing: 2px;'>RESTRICTED ACCESS. AUTHORIZED PERSONNEL ONLY.</p>", unsafe_allow_html=True)
+    
+    # Centered login box to fix the "blank" look
+    col1, col2, col3 = st.columns([1, 2, 1])
+    
+    with col2:
+        st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
+        st.write("### SYSTEM LOCK")
+        password = st.text_input("ENTER OVERRIDE CODE", type="password")
+        st.markdown("</div>", unsafe_allow_html=True)
+        
+        if password == "":
+            st.info("System awaiting administrator credentials to view member database and register new clients.")
+    
+    # Only show the dashboard if the password is correct
+    if password == "admin123": 
+        st.success("ACCESS GRANTED. WELCOME, COMMANDER.")
+        st.write("<br>", unsafe_allow_html=True)
+        
+        with st.expander("REGISTER NEW MEMBER"):
+            new_id = st.text_input("Member ID (e.g., R1-001)")
+            new_name = st.text_input("Full Name")
+            new_phone = st.text_input("Phone Number")
+            new_expiry = st.date_input("Membership Expiry Date")
+            
+            if st.button("UPLOAD TO DATABASE"):
+                existing_ids = df['id'].astype(str).str.replace(r'\.0$', '', regex=True).str.strip().str.upper().tolist()
+                clean_new_id = str(new_id).strip().upper()
+                
+                if clean_new_id in existing_ids:
+                    st.error("❌ ID ALREADY EXISTS IN MAINFRAME.")
+                else:
+                    new_row = pd.DataFrame([{
+                        'id': clean_new_id, 
+                        'name': new_name, 
+                        'phone': new_phone, 
+                        'expiry_date': new_expiry.strftime('%Y-%m-%d')
+                    }])
+                    updated_df = pd.concat([df, new_row], ignore_index=True)
+                    
+                    conn.update(worksheet="Members", data=updated_df)
+                    st.success("✅ UPLOAD SUCCESSFUL! MEMBER ADDED TO CLOUD.")
+                    st.rerun()
+
+        st.divider()
+        st.write("### ACTIVE RADAR & MEMBER LOGS")
+        
+        if not df.empty:
+            try:
+                df['date_obj'] = pd.to_datetime(df['expiry_date']).dt.date
+                today = date.today()
+                
+                expiring_soon = df[(df['date_obj'] <= today + pd.Timedelta(days=7))]
+                
+                if not expiring_soon.empty:
+                    st.markdown(f"<div class='info-box' style='border-left: 5px solid #ff3333;'><h4>⚠️ ALERT: {len(expiring_soon)} MEMBERSHIPS EXPIRING SOON!</h4></div>", unsafe_allow_html=True)
+                    st.table(expiring_soon.drop(columns=['date_obj']))
+            except:
+                pass
+            
+            st.write("#### COMPLETE MAINFRAME LOG")
+            display_df = df.drop(columns=['date_obj']) if 'date_obj' in df.columns else df
+            st.dataframe(display_df, use_container_width=True)
+            
+    elif password != "":
+        st.error("❌ ACCESS DENIED. INCORRECT OVERRIDE CODE.")
