@@ -27,7 +27,7 @@ st.markdown("""
     }
     
     /* Clean, Elegant Typography */
-    h1, h2, h3, h4 { color: #D4AF37; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
+    h1, h2, h3, h4 { color: #D4AF37; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0px; }
     strong { color: #D4AF37; font-weight: 700; }
     
     /* Perfect Carbon Fibre Pattern for Sidebar */
@@ -119,6 +119,7 @@ st.markdown("""
         transition: all 0.3s ease;
         text-transform: uppercase;
         box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        margin-top: 10px;
     }
     .stButton>button:hover { 
         background-color: #ffffff; 
@@ -171,8 +172,8 @@ st.sidebar.markdown("""
 # 1. HOME BASE 
 # ==========================================
 if page == "Home Base":
-    st.markdown("<h1 style='font-size: 3.5rem; text-align: center; margin-bottom: 0;'>R1 <span style='color: #ffffff;'>FITNESS</span></h1>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center; color: #888; font-size: 1.2rem; letter-spacing: 4px; font-weight: 400;'>ELEVATE YOUR STANDARD</p><br>", unsafe_allow_html=True)
+    st.markdown("<h1 style='font-size: 3.5rem; text-align: center;'>R1 <span style='color: #ffffff;'>FITNESS</span></h1>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; color: #888; font-size: 1.2rem; letter-spacing: 4px; font-weight: 400; margin-bottom: 20px;'>ELEVATE YOUR STANDARD</p>", unsafe_allow_html=True)
     
     st.image("https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop", use_container_width=True)
     st.write("---")
@@ -200,7 +201,7 @@ if page == "Home Base":
     with col_bmi:
         st.image("https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=1470&auto=format&fit=crop", use_container_width=True)
         st.markdown("<div style='background-color: #0f0f0f; padding: 30px; border-radius: 4px; margin-top: 15px; border: 1px solid #1a1a1a; box-shadow: 0 4px 15px rgba(0,0,0,0.5);'>", unsafe_allow_html=True)
-        st.markdown("<h4 style='color: #fff; text-align: center; font-size: 16px;'>BMI ASSESSMENT</h4><br>", unsafe_allow_html=True)
+        st.markdown("<h4 style='color: #fff; text-align: center; font-size: 16px; margin-bottom: 15px;'>BMI ASSESSMENT</h4>", unsafe_allow_html=True)
         weight = st.number_input("Weight (kg)", min_value=1.0, step=0.1)
         height = st.number_input("Height (cm)", min_value=1.0, step=0.1)
         
@@ -214,7 +215,7 @@ if page == "Home Base":
 # 2. MEMBERSHIP PLANS
 # ==========================================
 elif page == "Membership Plans":
-    st.markdown("<h1 style='text-align: center; font-size: 3rem;'>MEMBERSHIP <span style='color: #ffffff;'>TIERS</span></h1><br>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center; font-size: 3rem; margin-bottom: 30px;'>MEMBERSHIP <span style='color: #ffffff;'>TIERS</span></h1>", unsafe_allow_html=True)
     
     p1, p2, p3 = st.columns(3)
     
@@ -247,7 +248,7 @@ elif page == "Membership Plans":
 # ==========================================
 elif page == "Pro Shop":
     st.markdown("<h1 style='text-align: center;'>R1 <span style='color: #ffffff;'>BOUTIQUE</span></h1>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center; color: #888; letter-spacing: 2px;'>PREMIUM SUPPLEMENTS & GEAR</p><br>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; color: #888; letter-spacing: 2px; margin-bottom: 30px;'>PREMIUM SUPPLEMENTS & GEAR</p>", unsafe_allow_html=True)
     
     s1, s2, s3, s4 = st.columns(4)
     
@@ -292,22 +293,22 @@ elif page == "Pro Shop":
         if st.button("PURCHASE", key="shop4"): st.info("Item held at concierge desk.")
 
 # ==========================================
-# 4. MEMBER PORTAL 
+# 4. MEMBER PORTAL (TIGHTENED LAYOUT)
 # ==========================================
 elif page == "Member Portal":
     st.markdown("""
-    <div style="display: flex; justify-content: center; margin-bottom: 30px;">
-        <img src="https://images.unsplash.com/photo-1574680096145-d05b474e2155?q=80&w=1470&auto=format&fit=crop" style="width: 80%; height: 300px; object-fit: cover; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.8);">
+    <div style="display: flex; justify-content: center; margin-bottom: 15px;">
+        <img src="https://images.unsplash.com/photo-1574680096145-d05b474e2155?q=80&w=1470&auto=format&fit=crop" style="width: 80%; height: 250px; object-fit: cover; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.8);">
     </div>
     """, unsafe_allow_html=True)
     
-    st.markdown("<h1 style='text-align: center; font-size: 2.5rem;'>MEMBER <span style='color: #ffffff;'>PORTAL</span></h1><br>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center; font-size: 2.5rem; margin-bottom: 15px;'>MEMBER <span style='color: #ffffff;'>PORTAL</span></h1>", unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        st.markdown("<div style='background-color:#0f0f0f; padding:40px; border-radius:8px; border: 1px solid #1a1a1a; box-shadow: 0 10px 25px rgba(0,0,0,0.5);'>", unsafe_allow_html=True)
-        member_id = st.text_input("ENTER MEMBER ID", placeholder="e.g. R1-001")
-        st.write("<br>", unsafe_allow_html=True)
+        st.markdown("<div style='background-color:#0f0f0f; padding:30px; border-radius:8px; border: 1px solid #1a1a1a; box-shadow: 0 10px 25px rgba(0,0,0,0.5);'>", unsafe_allow_html=True)
+        st.markdown("<h3 style='color:#D4AF37; font-size:16px; margin-bottom: 15px; text-align: center;'>SYSTEM ACCESS</h3>", unsafe_allow_html=True)
+        member_id = st.text_input("ENTER MEMBER ID", placeholder="e.g. R1-001", label_visibility="collapsed")
         
         if st.button("VERIFY IDENTITY"):
             df['id'] = df['id'].astype(str).str.replace(r'\.0$', '', regex=True).str.strip().str.upper()
@@ -334,14 +335,17 @@ elif page == "Member Portal":
         st.markdown("</div>", unsafe_allow_html=True)
 
 # ==========================================
-# 5. ADMIN COMMAND CENTER
+# 5. ADMIN COMMAND CENTER (TIGHTENED LAYOUT)
 # ==========================================
 elif page == "Admin Command":
-    st.markdown("<h1 style='text-align: center; font-size: 2.5rem; margin-top: 20px;'>OPERATIONS <span style='color: #ffffff;'>DASHBOARD</span></h1><br>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center; font-size: 2.5rem; margin-top: 0; margin-bottom: 20px;'>OPERATIONS <span style='color: #ffffff;'>DASHBOARD</span></h1>", unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        password = st.text_input("ADMINISTRATOR PASSWORD", type="password", placeholder="Enter Password")
+        st.markdown("<div style='background-color:#0f0f0f; padding:30px; border-radius:8px; border: 1px solid #1a1a1a; text-align:center; box-shadow: 0 10px 25px rgba(0,0,0,0.5);'>", unsafe_allow_html=True)
+        st.markdown("<h3 style='color:#D4AF37; margin-bottom:15px; font-size:18px;'>SECURITY CHECKPOINT</h3>", unsafe_allow_html=True)
+        password = st.text_input("ADMINISTRATOR PASSWORD", type="password", placeholder="Enter Override Code", label_visibility="collapsed")
+        st.markdown("</div>", unsafe_allow_html=True)
             
     if password == "admin123": 
         st.success("Authentication successful.")
@@ -378,7 +382,6 @@ elif page == "Admin Command":
             if not df.empty:
                 csv_data = df.drop(columns=['date_obj']) if 'date_obj' in df.columns else df
                 csv = csv_data.to_csv(index=False).encode('utf-8')
-                st.markdown("<br>", unsafe_allow_html=True)
                 st.download_button(
                     label="📥 EXPORT DATABASE",
                     data=csv,
