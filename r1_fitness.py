@@ -8,16 +8,32 @@ st.set_page_config(page_title="R1 Fitness", layout="wide")
 
 st.markdown("""
     <style>
-    /* Main background */
-    .stApp { background-color: #050505; color: #ffffff; }
+    /* Realistic Industrial Striped Background */
+    .stApp { 
+        background-color: #050505;
+        background-image: repeating-linear-gradient(
+            -45deg,
+            #050505,
+            #050505 20px,
+            rgba(255, 204, 0, 0.05) 20px,
+            rgba(255, 204, 0, 0.05) 22px,
+            rgba(0, 229, 255, 0.05) 22px,
+            rgba(0, 229, 255, 0.05) 24px
+        );
+        color: #ffffff; 
+    }
     
-    /* Bold Accents - Mixing Yellow & Electric Blue */
+    /* Bold Accents */
     h1, h2, h3, h4 { color: #FFCC00; font-family: 'Arial Black', sans-serif; text-transform: uppercase; text-shadow: 0px 0px 10px rgba(255, 204, 0, 0.2); }
     .blue-glow { color: #00E5FF; text-shadow: 0px 0px 15px rgba(0, 229, 255, 0.6); }
     strong { color: #00E5FF; font-weight: 900; }
     
     /* Sidebar Menu Animation */
-    [data-testid="stSidebar"] { border-right: 2px solid #00E5FF; box-shadow: 5px 0 15px rgba(0, 229, 255, 0.1); }
+    [data-testid="stSidebar"] { 
+        background-color: rgba(5, 5, 5, 0.95);
+        border-right: 2px solid #00E5FF; 
+        box-shadow: 5px 0 15px rgba(0, 229, 255, 0.1); 
+    }
     .stRadio div[role="radiogroup"] label { transition: all 0.3s ease-in-out; padding: 10px; border-radius: 8px; }
     .stRadio div[role="radiogroup"] label:hover { transform: scale(1.05) translateX(10px); background-color: #111; color: #00E5FF; border-left: 3px solid #00E5FF; }
     
@@ -62,10 +78,6 @@ st.markdown("""
         70% { box-shadow: 0 0 0 10px rgba(255, 204, 0, 0); }
         100% { box-shadow: 0 0 0 0 rgba(255, 204, 0, 0); }
     }
-    
-    /* Store Product Box */
-    .product-box { background-color: #111; padding: 15px; border-radius: 10px; text-align: center; border: 1px solid #333; }
-    .product-box img { border-radius: 5px; margin-bottom: 10px; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -95,7 +107,7 @@ if page == "Home Base":
     with col_rules:
         st.write("### 🕒 GYM TIMINGS")
         st.markdown("""
-        <div style="background-color: #111; border-left: 5px solid #00E5FF; padding: 20px; margin-bottom: 15px; text-align: center;">
+        <div style="background-color: #111; border-left: 5px solid #00E5FF; padding: 20px; margin-bottom: 15px; text-align: center; border-radius: 8px;">
             <h2 style="color: #ffffff; margin: 0; font-size: 2.5rem;">09:00 - 12:00</h2>
             <p style="color: #00E5FF; font-weight: bold; margin: 0; letter-spacing: 2px;">OPEN EVERY DAY</p>
         </div>
@@ -103,7 +115,7 @@ if page == "Home Base":
         
         st.write("### 📜 RULES OF THE IRON")
         st.markdown("""
-        <ul style="color: #ccc; font-size: 1.1rem; line-height: 1.8;">
+        <ul style="color: #ccc; font-size: 1.1rem; line-height: 1.8; background-color: rgba(17, 17, 17, 0.8); padding: 20px 40px; border-radius: 8px;">
             <li><strong style="color: #FFCC00;">NO SMOKING:</strong> Strictly prohibited. Keep the air clean.</li>
             <li><strong style="color: #FFCC00;">HYDRATION:</strong> Unlimited clean drinking water provided.</li>
             <li><strong style="color: #FFCC00;">LOCKER ROOMS:</strong> Secure rooms provided to change clothes.</li>
@@ -112,7 +124,8 @@ if page == "Home Base":
 
     with col_bmi:
         st.image("https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=1470&auto=format&fit=crop", use_container_width=True)
-        st.markdown("<h4 style='color: #00E5FF; text-align: center; margin-top: 15px;'>BMI CALCULATOR</h4>", unsafe_allow_html=True)
+        st.markdown("<div style='background-color: rgba(17,17,17,0.8); padding: 20px; border-radius: 8px; margin-top: 15px;'>", unsafe_allow_html=True)
+        st.markdown("<h4 style='color: #00E5FF; text-align: center;'>BMI CALCULATOR</h4>", unsafe_allow_html=True)
         weight = st.number_input("Weight (kg)", min_value=1.0, step=0.1)
         height = st.number_input("Height (cm)", min_value=1.0, step=0.1)
         
@@ -120,14 +133,16 @@ if page == "Home Base":
             height_m = height / 100
             bmi = weight / (height_m ** 2)
             st.success(f"**Your BMI is: {round(bmi, 2)}**")
+        st.markdown("</div>", unsafe_allow_html=True)
 
 # ==========================================
-# 2. MEMBERSHIP PLANS (WITH VIP & JOIN BUTTONS)
+# 2. MEMBERSHIP PLANS
 # ==========================================
 elif page == "Membership Plans":
-    st.markdown("<h1 style='text-align: center; font-size: 3.5rem;'>CHOOSE YOUR <span style='color: #00E5FF;'>WEAPON</span></h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center; font-size: 3.5rem;'>CHOOSE YOUR <span style='color: #00E5FF;'>WEAPON</span></h1><br>", unsafe_allow_html=True)
     
-    p1, p2, p3, p4 = st.columns(4)
+    st.write("### 🔥 STANDARD TIERS")
+    p1, p2, p3 = st.columns(3)
     
     with p1:
         st.markdown("""<div class="custom-card"><h3>1 MONTH</h3><h2>₹1000</h2><p>Full gym access<br>Standard equipment</p></div>""", unsafe_allow_html=True)
@@ -141,9 +156,17 @@ elif page == "Membership Plans":
         st.markdown("""<div class="custom-card"><h3>1 YEAR</h3><h2>₹5000</h2><p>Personal training prep<br><strong>Best Value!</strong></p></div>""", unsafe_allow_html=True)
         if st.button("JOIN NOW", key="btn3"): st.success("Visit the front desk to activate your 1-Year Plan!")
         
+    st.divider()
+    st.write("### 💎 LUXURY & ELITE TIERS")
+    p4, p5 = st.columns(2)
+    
     with p4:
-        st.markdown("""<div class="custom-card" style="border-top: 5px solid #FFCC00;"> <h3 style="color:#FFCC00;">VIP ELITE</h3><h2>₹35000</h2><p>1 Year Access<br>Dedicated Trainer<br>Free Supplements</p></div>""", unsafe_allow_html=True)
+        st.markdown("""<div class="custom-card" style="border-top: 5px solid #FFCC00;"> <h3 style="color:#FFCC00;">VIP ELITE</h3><h2>₹35,000</h2><p>1 Year Access<br>Dedicated Trainer<br>Free Monthly Supplements</p></div>""", unsafe_allow_html=True)
         if st.button("BECOME VIP", key="btn4"): st.success("Visit the front desk for VIP Onboarding!")
+        
+    with p5:
+        st.markdown("""<div class="custom-card" style="border-top: 5px solid #ffffff; background-color: #0a0a0a;"> <h3 style="color:#ffffff;">PERSONAL PLAN</h3><h2 style="color: #00E5FF;">₹1,00,000</h2><p>Ultimate 1 Year Access<br><strong style="color:#FFCC00;">Access to Swimming Pool & Garden</strong><br>Exclusive Smoking Zone Lounge</p></div>""", unsafe_allow_html=True)
+        if st.button("BECOME A LEGEND", key="btn5"): st.success("Visit the front desk for Ultimate Onboarding!")
 
 # ==========================================
 # 3. PRO SHOP (SUPPLEMENTS & GEAR)
@@ -155,35 +178,32 @@ elif page == "Pro Shop":
     s1, s2, s3, s4 = st.columns(4)
     
     with s1:
-        st.image("https://images.unsplash.com/photo-1593095948071-474c5cc2989d?q=80&w=500&auto=format&fit=crop", use_container_width=True)
+        st.image("https://images.unsplash.com/photo-1594882645126-14020914d58d?q=80&w=500&auto=format&fit=crop", use_container_width=True)
         st.markdown("<h4 style='text-align:center;'>100% WHEY PROTEIN</h4><p style='text-align:center; color:#00E5FF; font-size:20px; font-weight:bold;'>₹6,500</p>", unsafe_allow_html=True)
         if st.button("BUY NOW", key="shop1"): st.info("Item added to desk pickup.")
         
     with s2:
-        st.image("https://images.unsplash.com/photo-1579722820308-d74e571900a9?q=80&w=500&auto=format&fit=crop", use_container_width=True)
-        st.markdown("<h4 style='text-align:center;'>PRE-WORKOUT ENERGY</h4><p style='text-align:center; color:#00E5FF; font-size:20px; font-weight:bold;'>₹2,200</p>", unsafe_allow_html=True)
+        st.image("https://images.unsplash.com/photo-1550345332-09e3ac987658?q=80&w=500&auto=format&fit=crop", use_container_width=True)
+        st.markdown("<h4 style='text-align:center;'>PRE-WORKOUT</h4><p style='text-align:center; color:#00E5FF; font-size:20px; font-weight:bold;'>₹2,200</p>", unsafe_allow_html=True)
         if st.button("BUY NOW", key="shop2"): st.info("Item added to desk pickup.")
         
     with s3:
-        st.image("https://images.unsplash.com/photo-1622345155702-8a9d1d615e4f?q=80&w=500&auto=format&fit=crop", use_container_width=True)
+        st.image("https://images.unsplash.com/photo-1605296867304-46d5465a13f1?q=80&w=500&auto=format&fit=crop", use_container_width=True)
         st.markdown("<h4 style='text-align:center;'>PURE CREATINE</h4><p style='text-align:center; color:#00E5FF; font-size:20px; font-weight:bold;'>₹1,500</p>", unsafe_allow_html=True)
         if st.button("BUY NOW", key="shop3"): st.info("Item added to desk pickup.")
         
     with s4:
-        st.image("https://images.unsplash.com/photo-1584735175315-9d58230133ac?q=80&w=500&auto=format&fit=crop", use_container_width=True)
-        st.markdown("<h4 style='text-align:center;'>LEATHER LIFTING BELT</h4><p style='text-align:center; color:#00E5FF; font-size:20px; font-weight:bold;'>₹1,800</p>", unsafe_allow_html=True)
+        st.image("https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=500&auto=format&fit=crop", use_container_width=True)
+        st.markdown("<h4 style='text-align:center;'>LIFTING BELT</h4><p style='text-align:center; color:#00E5FF; font-size:20px; font-weight:bold;'>₹1,800</p>", unsafe_allow_html=True)
         if st.button("BUY NOW", key="shop4"): st.info("Item added to desk pickup.")
 
 # ==========================================
-# 4. MEMBER PORTAL (FIXED LAYOUT)
+# 4. MEMBER PORTAL 
 # ==========================================
 elif page == "Member Portal":
-    # Replaced broken image with a fresh, working dark gym photo
     st.image("https://images.unsplash.com/photo-1574680096145-d05b474e2155?q=80&w=1470&auto=format&fit=crop", use_container_width=True)
-    
     st.markdown("<h1 style='text-align: center; font-size: 3.5rem; margin-top: 20px;'>MEMBER <span style='color: #00E5FF;'>PORTAL</span></h1>", unsafe_allow_html=True)
     
-    # Removed the HTML div wrapping the text input to fix the blank row glitch
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         st.write("---")
@@ -214,7 +234,7 @@ elif page == "Member Portal":
         st.write("---")
 
 # ==========================================
-# 5. ADMIN COMMAND CENTER 
+# 5. ADMIN COMMAND CENTER (RESTORED TO ADVANCED)
 # ==========================================
 elif page == "Admin Command":
     st.image("https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1470&auto=format&fit=crop", use_container_width=True)
@@ -222,12 +242,18 @@ elif page == "Admin Command":
     
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
+        st.markdown("<div style='background-color:#0a0000; border: 1px solid #00E5FF; padding:30px; border-radius:10px; text-align:center; margin-bottom: 20px;'>", unsafe_allow_html=True)
+        st.write("### 🔐 SYSTEM LOCK")
         password = st.text_input("ENTER OVERRIDE CODE", type="password")
+        st.markdown("</div>", unsafe_allow_html=True)
         
+        if password == "":
+            st.info("System awaiting administrator credentials to view database and register clients.")
+            
     if password == "admin123": 
         st.success("ACCESS GRANTED. WELCOME, COMMANDER.")
         
-        with st.expander("REGISTER NEW MEMBER"):
+        with st.expander("➕ REGISTER NEW MEMBER"):
             new_id = st.text_input("Member ID (e.g., R1-001)")
             new_name = st.text_input("Full Name")
             new_phone = st.text_input("Phone Number")
@@ -252,6 +278,22 @@ elif page == "Admin Command":
                     st.rerun()
 
         st.divider()
-        st.write("### ACTIVE RADAR & MEMBER LOGS")
+        st.write("### 📡 ACTIVE RADAR & MEMBER LOGS")
         if not df.empty:
-            st.dataframe(df, use_container_width=True)
+            try:
+                df['date_obj'] = pd.to_datetime(df['expiry_date']).dt.date
+                today = date.today()
+                
+                expiring_soon = df[(df['date_obj'] <= today + pd.Timedelta(days=7))]
+                
+                if not expiring_soon.empty:
+                    st.error(f"⚠️ ALERT: {len(expiring_soon)} MEMBERSHIPS EXPIRING SOON OR EXPIRED!")
+                    st.table(expiring_soon.drop(columns=['date_obj']))
+            except:
+                pass
+            
+            st.write("#### COMPLETE MAINFRAME LOG")
+            display_df = df.drop(columns=['date_obj']) if 'date_obj' in df.columns else df
+            st.dataframe(display_df, use_container_width=True)
+    elif password != "":
+        st.error("❌ ACCESS DENIED. INCORRECT OVERRIDE CODE.")
