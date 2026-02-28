@@ -28,16 +28,33 @@ st.markdown("""
     .blue-glow { color: #00E5FF; text-shadow: 0px 0px 15px rgba(0, 229, 255, 0.6); }
     strong { color: #00E5FF; font-weight: 900; }
     
-    /* Sidebar Menu Animation */
-    [data-testid="stSidebar"] { 
-        background-color: rgba(5, 5, 5, 0.95);
-        border-right: 2px solid #00E5FF; 
-        box-shadow: 5px 0 15px rgba(0, 229, 255, 0.1); 
+    /* Realistic 3D Carbon Fibre Pattern for Sidebar & Cards */
+    .carbon-fiber {
+        background:
+            radial-gradient(black 15%, transparent 16%) 0 0,
+            radial-gradient(black 15%, transparent 16%) 8px 8px,
+            radial-gradient(rgba(255,255,255,.05) 15%, transparent 20%) 0 1px,
+            radial-gradient(rgba(255,255,255,.05) 15%, transparent 20%) 8px 9px;
+        background-color: #111;
+        background-size: 16px 16px;
     }
-    .stRadio div[role="radiogroup"] label { transition: all 0.3s ease-in-out; padding: 10px; border-radius: 8px; }
-    .stRadio div[role="radiogroup"] label:hover { transform: scale(1.05) translateX(10px); background-color: #111; color: #00E5FF; border-left: 3px solid #00E5FF; }
     
-    /* Custom Cards */
+    /* Sidebar Menu Animation + Carbon Fibre */
+    [data-testid="stSidebar"] { 
+        background:
+            radial-gradient(black 15%, transparent 16%) 0 0,
+            radial-gradient(black 15%, transparent 16%) 8px 8px,
+            radial-gradient(rgba(255,255,255,.05) 15%, transparent 20%) 0 1px,
+            radial-gradient(rgba(255,255,255,.05) 15%, transparent 20%) 8px 9px;
+        background-color: #0a0a0a;
+        background-size: 16px 16px;
+        border-right: 2px solid #00E5FF; 
+        box-shadow: 5px 0 25px rgba(0, 229, 255, 0.15); 
+    }
+    .stRadio div[role="radiogroup"] label { transition: all 0.3s ease-in-out; padding: 10px; border-radius: 8px; background-color: rgba(0,0,0,0.5); margin-bottom: 5px; border: 1px solid #222; }
+    .stRadio div[role="radiogroup"] label:hover { transform: scale(1.05) translateX(10px); background-color: #000; color: #00E5FF; border-left: 3px solid #00E5FF; box-shadow: 0 0 10px rgba(0, 229, 255, 0.3); }
+    
+    /* Standard Custom Cards */
     .custom-card {
         background-color: #111111;
         padding: 25px;
@@ -51,6 +68,33 @@ st.markdown("""
     .custom-card:hover { transform: translateY(-10px); box-shadow: 0 8px 25px rgba(0, 229, 255, 0.4); }
     .custom-card h3 { color: #00E5FF; margin-bottom: 10px; font-size: 24px;}
     .custom-card h2 { color: #ffffff; margin-bottom: 10px; font-size: 32px;}
+    
+    /* 3D Carbon Fibre Product Cards */
+    .product-card {
+        background:
+            radial-gradient(black 15%, transparent 16%) 0 0,
+            radial-gradient(black 15%, transparent 16%) 8px 8px,
+            radial-gradient(rgba(255,255,255,.05) 15%, transparent 20%) 0 1px,
+            radial-gradient(rgba(255,255,255,.05) 15%, transparent 20%) 8px 9px;
+        background-color: #151515;
+        background-size: 16px 16px;
+        padding: 20px;
+        border-radius: 12px;
+        border: 2px solid #222;
+        border-bottom: 4px solid #00E5FF;
+        box-shadow: 0 15px 25px rgba(0,0,0,0.9), inset 0 2px 5px rgba(255,255,255,0.05);
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        margin-bottom: 15px;
+    }
+    .product-card:hover { 
+        transform: translateY(-12px) scale(1.02); 
+        box-shadow: 0 20px 35px rgba(0, 229, 255, 0.3), inset 0 2px 5px rgba(255,255,255,0.1); 
+        border-bottom: 4px solid #FFCC00;
+    }
+    .product-card img { border-radius: 8px; border: 2px solid #00E5FF; box-shadow: 0 5px 15px rgba(0,0,0,0.8); margin-bottom: 15px; width: 100%; object-fit: cover; height: 200px; }
+    .price-tag { color: #00E5FF; font-size: 24px; font-weight: 900; text-shadow: 0 0 10px rgba(0, 229, 255, 0.4); margin: 5px 0; }
+    .weight-tag { color: #FFCC00; font-size: 14px; font-weight: bold; }
     
     /* Animated Pulse Button */
     .stButton>button { 
@@ -169,7 +213,7 @@ elif page == "Membership Plans":
         if st.button("BECOME A LEGEND", key="btn5"): st.success("Visit the front desk for Ultimate Onboarding!")
 
 # ==========================================
-# 3. PRO SHOP (SUPPLEMENTS & GEAR)
+# 3. PRO SHOP (3D CARBON FIBRE)
 # ==========================================
 elif page == "Pro Shop":
     st.markdown("<h1 style='text-align: center;'>R1 <span style='color: #00E5FF;'>PRO SHOP</span></h1>", unsafe_allow_html=True)
@@ -178,23 +222,43 @@ elif page == "Pro Shop":
     s1, s2, s3, s4 = st.columns(4)
     
     with s1:
-        st.image("https://images.unsplash.com/photo-1594882645126-14020914d58d?q=80&w=500&auto=format&fit=crop", use_container_width=True)
-        st.markdown("<h4 style='text-align:center;'>100% WHEY PROTEIN</h4><p style='text-align:center; color:#00E5FF; font-size:20px; font-weight:bold;'>₹6,500</p>", unsafe_allow_html=True)
+        st.markdown("""
+        <div class="product-card">
+            <img src="https://images.unsplash.com/photo-1594882645126-14020914d58d?q=80&w=500&auto=format&fit=crop">
+            <h4 style="color: #fff; margin-bottom: 0;">100% WHEY PROTEIN</h4>
+            <div class="price-tag">₹1,800 <span class="weight-tag">/ 500g</span></div>
+        </div>
+        """, unsafe_allow_html=True)
         if st.button("BUY NOW", key="shop1"): st.info("Item added to desk pickup.")
         
     with s2:
-        st.image("https://images.unsplash.com/photo-1550345332-09e3ac987658?q=80&w=500&auto=format&fit=crop", use_container_width=True)
-        st.markdown("<h4 style='text-align:center;'>PRE-WORKOUT</h4><p style='text-align:center; color:#00E5FF; font-size:20px; font-weight:bold;'>₹2,200</p>", unsafe_allow_html=True)
+        st.markdown("""
+        <div class="product-card">
+            <img src="https://images.unsplash.com/photo-1550345332-09e3ac987658?q=80&w=500&auto=format&fit=crop">
+            <h4 style="color: #fff; margin-bottom: 0;">PRE-WORKOUT ENERGY</h4>
+            <div class="price-tag">₹1,200 <span class="weight-tag">/ 300g</span></div>
+        </div>
+        """, unsafe_allow_html=True)
         if st.button("BUY NOW", key="shop2"): st.info("Item added to desk pickup.")
         
     with s3:
-        st.image("https://images.unsplash.com/photo-1605296867304-46d5465a13f1?q=80&w=500&auto=format&fit=crop", use_container_width=True)
-        st.markdown("<h4 style='text-align:center;'>PURE CREATINE</h4><p style='text-align:center; color:#00E5FF; font-size:20px; font-weight:bold;'>₹1,500</p>", unsafe_allow_html=True)
+        st.markdown("""
+        <div class="product-card">
+            <img src="https://images.unsplash.com/photo-1605296867304-46d5465a13f1?q=80&w=500&auto=format&fit=crop">
+            <h4 style="color: #fff; margin-bottom: 0;">PURE CREATINE</h4>
+            <div class="price-tag">₹800 <span class="weight-tag">/ 250g</span></div>
+        </div>
+        """, unsafe_allow_html=True)
         if st.button("BUY NOW", key="shop3"): st.info("Item added to desk pickup.")
         
     with s4:
-        st.image("https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=500&auto=format&fit=crop", use_container_width=True)
-        st.markdown("<h4 style='text-align:center;'>LIFTING BELT</h4><p style='text-align:center; color:#00E5FF; font-size:20px; font-weight:bold;'>₹1,800</p>", unsafe_allow_html=True)
+        st.markdown("""
+        <div class="product-card">
+            <img src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=500&auto=format&fit=crop">
+            <h4 style="color: #fff; margin-bottom: 0;">LEATHER LIFTING BELT</h4>
+            <div class="price-tag">₹1,500 <span class="weight-tag">/ 1 pc</span></div>
+        </div>
+        """, unsafe_allow_html=True)
         if st.button("BUY NOW", key="shop4"): st.info("Item added to desk pickup.")
 
 # ==========================================
@@ -234,7 +298,7 @@ elif page == "Member Portal":
         st.write("---")
 
 # ==========================================
-# 5. ADMIN COMMAND CENTER (RESTORED TO ADVANCED)
+# 5. ADMIN COMMAND CENTER 
 # ==========================================
 elif page == "Admin Command":
     st.image("https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1470&auto=format&fit=crop", use_container_width=True)
