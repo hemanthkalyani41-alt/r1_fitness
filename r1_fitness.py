@@ -29,17 +29,6 @@ st.markdown("""
     strong { color: #00E5FF; font-weight: 900; }
     
     /* Realistic 3D Carbon Fibre Pattern for Sidebar & Cards */
-    .carbon-fiber {
-        background:
-            radial-gradient(black 15%, transparent 16%) 0 0,
-            radial-gradient(black 15%, transparent 16%) 8px 8px,
-            radial-gradient(rgba(255,255,255,.05) 15%, transparent 20%) 0 1px,
-            radial-gradient(rgba(255,255,255,.05) 15%, transparent 20%) 8px 9px;
-        background-color: #111;
-        background-size: 16px 16px;
-    }
-    
-    /* Sidebar Menu Animation + Carbon Fibre */
     [data-testid="stSidebar"] { 
         background:
             radial-gradient(black 15%, transparent 16%) 0 0,
@@ -92,7 +81,18 @@ st.markdown("""
         box-shadow: 0 20px 35px rgba(0, 229, 255, 0.3), inset 0 2px 5px rgba(255,255,255,0.1); 
         border-bottom: 4px solid #FFCC00;
     }
-    .product-card img { border-radius: 8px; border: 2px solid #00E5FF; box-shadow: 0 5px 15px rgba(0,0,0,0.8); margin-bottom: 15px; width: 100%; object-fit: cover; height: 200px; }
+    
+    /* FORCES PERFECT SQUARE ASPECT RATIOS FOR ALL PRO SHOP IMAGES */
+    .product-card img { 
+        border-radius: 8px; 
+        border: 2px solid #00E5FF; 
+        box-shadow: 0 5px 15px rgba(0,0,0,0.8); 
+        margin-bottom: 15px; 
+        width: 100%; 
+        aspect-ratio: 1 / 1; 
+        object-fit: cover; 
+    }
+    
     .price-tag { color: #00E5FF; font-size: 24px; font-weight: 900; text-shadow: 0 0 10px rgba(0, 229, 255, 0.4); margin: 5px 0; }
     .weight-tag { color: #FFCC00; font-size: 14px; font-weight: bold; }
     
@@ -133,9 +133,14 @@ try:
 except:
     df = pd.DataFrame(columns=['id', 'name', 'phone', 'expiry_date'])
 
-# --- SIDEBAR NAVIGATION ---
+# --- SIDEBAR NAVIGATION WITH BOTTOM BARBELL LOGO ---
 st.sidebar.markdown("<h2 style='text-align: center;' class='blue-glow'>R1 FITNESS</h2>", unsafe_allow_html=True)
 page = st.sidebar.radio("SYSTEM MENU", ["Home Base", "Membership Plans", "Pro Shop", "Member Portal", "Admin Command"])
+
+# Pushes the logo to the bottom of the sidebar
+st.sidebar.markdown("<br><br><br><br><br><br>", unsafe_allow_html=True)
+st.sidebar.image("https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=500&auto=format&fit=crop", use_container_width=True)
+st.sidebar.markdown("<p style='text-align: center; color: #FFCC00; font-weight: 900; letter-spacing: 2px; margin-top: -10px;'>IRON & HONOR</p>", unsafe_allow_html=True)
 
 # ==========================================
 # 1. HOME BASE 
@@ -213,7 +218,7 @@ elif page == "Membership Plans":
         if st.button("BECOME A LEGEND", key="btn5"): st.success("Visit the front desk for Ultimate Onboarding!")
 
 # ==========================================
-# 3. PRO SHOP (3D CARBON FIBRE)
+# 3. PRO SHOP (3D CARBON FIBRE & SQUARE IMAGES)
 # ==========================================
 elif page == "Pro Shop":
     st.markdown("<h1 style='text-align: center;'>R1 <span style='color: #00E5FF;'>PRO SHOP</span></h1>", unsafe_allow_html=True)
@@ -298,24 +303,39 @@ elif page == "Member Portal":
         st.write("---")
 
 # ==========================================
-# 5. ADMIN COMMAND CENTER 
+# 5. ADMIN COMMAND CENTER (AUTO-DELETE ACTIVE)
 # ==========================================
 elif page == "Admin Command":
     st.image("https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1470&auto=format&fit=crop", use_container_width=True)
     st.markdown("<h1 style='text-align: center; font-size: 3.5rem; margin-top: 20px;'>COMMAND <span style='color: #00E5FF;'>CENTER</span></h1>", unsafe_allow_html=True)
     
+    # Removed HTML div to kill the blank space, using collapsed label for tightness
+    st.markdown("<h3 style='text-align: center; color: #00E5FF;'>🔐 SYSTEM LOCK</h3>", unsafe_allow_html=True)
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        st.markdown("<div style='background-color:#0a0000; border: 1px solid #00E5FF; padding:30px; border-radius:10px; text-align:center; margin-bottom: 20px;'>", unsafe_allow_html=True)
-        st.write("### 🔐 SYSTEM LOCK")
-        password = st.text_input("ENTER OVERRIDE CODE", type="password")
-        st.markdown("</div>", unsafe_allow_html=True)
-        
-        if password == "":
-            st.info("System awaiting administrator credentials to view database and register clients.")
+        password = st.text_input("ENTER OVERRIDE CODE", type="password", label_visibility="collapsed", placeholder="Enter Password")
             
     if password == "admin123": 
         st.success("ACCESS GRANTED. WELCOME, COMMANDER.")
+        
+        # AUTONOMOUS EXPIRED MEMBER DELETION PROTOCOL
+        if not df.empty:
+            try:
+                df['date_obj'] = pd.to_datetime(df['expiry_date'], errors='coerce').dt.date
+                today = date.today()
+                
+                # Filter out anyone whose date is less than today
+                expired_mask = df['date_obj'] < today
+                
+                if expired_mask.any():
+                    num_deleted = expired_mask.sum()
+                    # Keep only active members
+                    df = df[~expired_mask]
+                    # Update Google Sheets immediately
+                    conn.update(worksheet="Members", data=df.drop(columns=['date_obj']))
+                    st.toast(f"🧹 SYSTEM PURGE: Automatically removed {num_deleted} expired member(s) from database.")
+            except:
+                pass
         
         with st.expander("➕ REGISTER NEW MEMBER"):
             new_id = st.text_input("Member ID (e.g., R1-001)")
@@ -337,6 +357,8 @@ elif page == "Admin Command":
                         'expiry_date': new_expiry.strftime('%Y-%m-%d')
                     }])
                     updated_df = pd.concat([df, new_row], ignore_index=True)
+                    if 'date_obj' in updated_df.columns:
+                        updated_df = updated_df.drop(columns=['date_obj'])
                     conn.update(worksheet="Members", data=updated_df)
                     st.success("✅ UPLOAD SUCCESSFUL! MEMBER ADDED TO CLOUD.")
                     st.rerun()
@@ -344,19 +366,7 @@ elif page == "Admin Command":
         st.divider()
         st.write("### 📡 ACTIVE RADAR & MEMBER LOGS")
         if not df.empty:
-            try:
-                df['date_obj'] = pd.to_datetime(df['expiry_date']).dt.date
-                today = date.today()
-                
-                expiring_soon = df[(df['date_obj'] <= today + pd.Timedelta(days=7))]
-                
-                if not expiring_soon.empty:
-                    st.error(f"⚠️ ALERT: {len(expiring_soon)} MEMBERSHIPS EXPIRING SOON OR EXPIRED!")
-                    st.table(expiring_soon.drop(columns=['date_obj']))
-            except:
-                pass
-            
-            st.write("#### COMPLETE MAINFRAME LOG")
+            st.write("#### COMPLETE MAINFRAME LOG (ACTIVE MEMBERS ONLY)")
             display_df = df.drop(columns=['date_obj']) if 'date_obj' in df.columns else df
             st.dataframe(display_df, use_container_width=True)
     elif password != "":
