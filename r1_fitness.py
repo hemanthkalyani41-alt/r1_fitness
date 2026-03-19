@@ -126,7 +126,7 @@ st.markdown("""
         box-shadow: 0 8px 20px rgba(212, 175, 55, 0.6); 
     }
     
-    /* Input Fields Styling to match theme */
+    /* Input Fields Styling */
     .stTextInput input {
         border: 1px solid #333 !important;
         background-color: #0a0a0a !important;
@@ -210,7 +210,19 @@ if page == "Home Base":
         if st.button("CALCULATE"):
             height_m = height / 100
             bmi = weight / (height_m ** 2)
-            st.success(f"**Your BMI Indicator: {round(bmi, 2)}**")
+            
+            st.markdown(f"<h3 style='text-align: center; color: #D4AF37; margin-top: 15px;'>YOUR BMI: {round(bmi, 2)}</h3>", unsafe_allow_html=True)
+            
+            # Health Insight Logic
+            if bmi < 18.5:
+                st.warning("📊 **Category: Underweight**\n\n**Insight:** You may need to increase your caloric intake. Focus on nutrient-dense foods and strength training to build healthy muscle mass.")
+            elif 18.5 <= bmi < 25:
+                st.success("📊 **Category: Optimal Weight**\n\n**Insight:** Excellent! You are in a healthy range. Maintain your current lifestyle with a balanced mix of resistance training and cardiovascular exercise.")
+            elif 25 <= bmi < 30:
+                st.warning("📊 **Category: Overweight**\n\n**Insight:** Consider a slight caloric deficit. Combining our premium cardio equipment with weight training will help optimize your body composition.")
+            else:
+                st.error("📊 **Category: Above Average**\n\n**Insight:** We recommend consulting with our Elite Personal Trainers to design a sustainable, customized fat-loss and nutrition protocol.")
+                
         st.markdown("</div>", unsafe_allow_html=True)
 
 # ==========================================
@@ -295,7 +307,7 @@ elif page == "Pro Shop":
         if st.button("PURCHASE", key="shop4"): st.info("Item held at concierge desk.")
 
 # ==========================================
-# 4. MEMBER PORTAL (SPLIT SCREEN LAYOUT)
+# 4. MEMBER PORTAL 
 # ==========================================
 elif page == "Member Portal":
     st.markdown("<h1 style='text-align: center; font-size: 3rem; margin-bottom: 40px;'>MEMBER <span style='color: #ffffff;'>PORTAL</span></h1>", unsafe_allow_html=True)
@@ -341,12 +353,11 @@ elif page == "Member Portal":
                 st.error("Credential not recognized.")
 
 # ==========================================
-# 5. ADMIN COMMAND CENTER (SPLIT SCREEN LAYOUT)
+# 5. ADMIN COMMAND CENTER 
 # ==========================================
 elif page == "Admin Command":
     st.markdown("<h1 style='text-align: center; font-size: 3rem; margin-bottom: 40px;'>OPERATIONS <span style='color: #ffffff;'>DASHBOARD</span></h1>", unsafe_allow_html=True)
     
-    # Check if logged in using session state
     if 'admin_logged_in' not in st.session_state:
         st.session_state.admin_logged_in = False
 
@@ -374,7 +385,6 @@ elif page == "Admin Command":
                 elif password != "":
                     st.error("Authentication failed.")
     
-    # If logged in, show the full dashboard
     if st.session_state.admin_logged_in:
         if st.button("🔒 LOG OUT"):
             st.session_state.admin_logged_in = False
@@ -410,7 +420,6 @@ elif page == "Admin Command":
             else:
                 st.metric(label="Expiring in 7 Days", value=0)
         with m3:
-            # EXPORT BUTTON
             if not df.empty:
                 csv_data = df.drop(columns=['date_obj']) if 'date_obj' in df.columns else df
                 csv = csv_data.to_csv(index=False).encode('utf-8')
